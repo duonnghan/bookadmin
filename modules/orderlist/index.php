@@ -1,0 +1,138 @@
+<?php
+define("IN_SITE", true);
+include_once("../../libs/functions.php");
+session_start();
+
+?>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Đơn hàng</title>
+    <?php include_once('../components/style.php') ?>
+</head>
+
+<body class="fix-header" onload="viewData()">
+
+    <!-- ============================================================== -->
+    <!-- Wrapper -->
+    <!-- ============================================================== -->
+    <div id="wrapper">
+        <?php include_once("../widgets/header.php");?>
+
+        <?php include_once("../widgets/sidebar.php");?>
+        <!-- ============================================================== -->
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bang danh sach cac admin -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 ">
+                        <div class="white-box">
+                            <h3 class="box-title">Danh sách các khách hàng</h3>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="tabledit" >
+                                    <thead>
+                                        <tr class="active">
+                                            <th>Mã đơn hàng</th>
+                                            <th>Tên khách hàng</th>
+                                            <th>Ngày đặt hàng</th>
+                                            <th>Ngày giao hàng</th>
+                                            <th>Tình trạng thanh toán</th>
+                                            <th>Tình trạng giao hàng</th>
+                                            <th>Hành động</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                           
+                            <script>
+                            function viewData(){
+                                $.ajax({
+                                    url: 'process.php?p=view',
+                                    method: 'GET'
+                                }).done(function(data){
+                                    $('tbody').html(data)
+                                    tableData()
+                                })
+                            }
+                            function tableData(){
+                                $('#tabledit').Tabledit({
+                                    url: 'process.php',
+                                    eventType: 'dblclick',
+                                    editButton: true,
+                                    deleteButton: true,
+                                    hideIdentifier: false,
+                                    buttons: {
+                                        edit: {
+                                            class: 'btn btn-sm btn-warning',
+                                            html: '<span class="glyphicon glyphicon-pencil"></span> Sửa',
+                                            action: 'edit'
+                                        },
+                                        delete: {
+                                            class: 'btn btn-sm btn-danger',
+                                            html: '<span class="glyphicon glyphicon-trash"></span> Xóa',
+                                            action: 'delete'
+                                        },
+                                        save: {
+                                            class: 'btn btn-sm btn-success',
+                                            html: 'Lưu'
+                                        },
+                                        confirm: {
+                                            class: 'btn btn-sm btn-primary',
+                                            html: 'Xác nhận'
+                                        }
+                                    },
+                                    columns: {
+                                        identifier: [0, 'id'],
+                                        editable: [[2, 'orderdate'],[3, 'paiddate'],[4, 'shipstat','{"1":"Đã thanh toán", "0":"Chưa thanh toán"}'],[5, 'shipstat','{"1":"Đã giao hàng", "0":"Chưa giao hàng"}']]
+                                    },
+                                    onSuccess: function(data, textStatus, jqXHR) {
+                                        viewData()
+                                    },
+                                    onFail: function(jqXHR, textStatus, errorThrown) {
+                                        console.log('onFail(jqXHR, textStatus, errorThrown)');
+                                        console.log(jqXHR);
+                                        console.log(textStatus);
+                                        console.log(errorThrown);
+                                    },
+                                    onAjax: function(action, serialize) {
+                                        console.log('onAjax(action, serialize)');
+                                        console.log(action);
+                                        console.log(serialize);
+                                    }
+                                });
+                            }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+    
+                
+            <!-- /.container-fluid -->
+            <?php include_once("../widgets/footer.php"); ?>
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <?php include_once('../components/script.php') ?>
+
+</body>
+
+</html>
