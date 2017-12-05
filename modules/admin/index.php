@@ -102,7 +102,7 @@ session_start();
                                     },
                                     columns: {
                                         identifier: [0, 'id'],
-                                        editable: [[1, 'name'],[2, 'password']]
+                                        editable: [[1, 'user']]
                                     },
                                     onSuccess: function(data, textStatus, jqXHR) {
                                         viewData()

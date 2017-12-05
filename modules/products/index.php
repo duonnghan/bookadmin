@@ -1,259 +1,297 @@
-<?php if (!defined('IN_SITE')) die ('The request not found'); ?>
-
-<!-- ============================================================== -->
-<!-- Bang danh sach cac admin -->
-<!-- ============================================================== -->
-<div class="row">
-    <div class="col-sm-12 col-md-12 col-lg-12 ">
-        <div class="white-box">
-            <h3 class="box-title">Danh sách sản phẩm</h3>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Tựa đề</th>
-                            <th>Giá</th>
-                            <th>Tác giả</th>
-                            <th>Thể loại</th>
-                            <th>Nhà xuất bản</th>
-                            <th>Số lượng</th>
-                            <th>Mô tả</th>
-                            <th>Bìa</th>
-                            <th>Lần cuối cập nhật</th>
-                            <th>Hành động</th>
-                            <th><button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd"><i class=" fa fa-plus-square"></i>  Thêm</button></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $i=1;
-                        $book_list = getBookInfo();
-                        foreach($book_list as $book){
-                    ?>
-                            <tr>
-                                <td>
-                                    <?php echo $book['id']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $admin['bookname']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $admin['price']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $admin['authorname']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $admin['categoryname']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $admin['publishername']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $admin['quantity']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $admin['description']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $admin['cover']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $admin['updated']; ?>
-                                </td>
-                                <td>
-                                    <a href="#demo" class="btn btn-warning" data-toggle="collapse"><i class="fa fa-sliders"></i></a>
-                                    <a href="#demo" class="btn btn-danger" data-toggle="collapse"><i class="fa fa-trash-o"></i></a>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                    ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- ============================================================== -->
-<!-- Them sach -->
-<!-- ============================================================== -->
-<div class="container">
-    <div class="row collapse white-box" id="collapseAdd">
-            <div class="col-md-4 col-md-offset-4 col-xs-12">
-
-                <form action="main.php?m=management&a=products_doinsert" method="post" class="form-horizontal form-material">
-                    <div class="form-group">
-                        <label class="col-md-12">Tựa sách</label>
-                        <div class="col-md-12">
-                            <input type="text" name="name" class="form-control form-control-line"> </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="example-email" class="col-md-12">Giá bán</label>
-                        <div class="col-md-12">
-                            <input type="text" class="form-control form-control-line" name="price" id="example-email"> </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-12">Tác giả</label>
-                        <div class="col-md-12">
-                            <input type="text" name="author" class="form-control form-control-line"> </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-12">Thể loại</label>
-                        <div class="col-sm-12">
-                            <select name="category" class="form-control form-control-line">
-                               <?php
-                                    $i=1;
-                                    $category_list = getCategoryInfo();
-                                    foreach($category_list as $category){
-                                ?>
-                                <option value="<?php echo $category['categoryname']; ?>"><?php echo $category['categoryname']; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-12">Nhà xuất bản</label>
-                        <div class="col-md-12">
-                            <input type="text" name="publisher" class="form-control form-control-line"> </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-12">Số lượng</label>
-                        <div class="col-md-12">
-                            <input type="text" name="quantity" class="form-control form-control-line"> </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-12">Mô tả</label>
-                        <div class="col-md-12">
-                            <textarea rows="5" name="description" class="form-control form-control-line"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-12">Ảnh bìa</label>
-                        <div class="col-md-12">
-                            <input class="form-control" type="file" name="cover">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <button name="addproduct" type="Submit" value="add" class="btn btn-success">Thêm</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-    </div>
-</div>
-
 <?php
-    if(isset($_POST['addproduct']) && $_POST['addproduct'] == "add"){
-        $name = $_POST['name'];
-        $price = $_POST['price'];
-        $author = $_POST['author'];
-        $category = $_POST['category'];
-        $publisher = $_POST['publisher'];
-        $quantity = $_POST['quantity'];
-        $description = $_POST['description'];
-        
-        $sql_add="INSERT INTO book ";
-        $result = dbQuery($sql_add);
-        if($result){
-            
-        }else{
-            
-        }
-    }
-
+define("IN_SITE", true);
+include_once("../../libs/functions.php");
+session_start();
+checkUser();
 ?>
 
+<!DOCTYPE html>
+<html>
 
-<!-- ============================================================== -->
-<!-- Cap nhat sach -->
-<!-- ============================================================== -->
-<div class="container">
-    <div class="row collapse" id="collapseUpdate">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Người quản trị</title>
+    <?php include_once('../components/style.php') ?>
+</head>
 
-        <div class="col-md-4 col-xs-12">
-            <div class="white-box">
+<body class="fix-header" onload="viewData()">
 
-                <!-- Load Image -->
-                <div class="user-bg"> <img width="100%" alt="user" src="../plugins/images/large/img1.jpg">
-                    <div class="overlay-box">
-                        <div class="user-content">
-                            <a href="javascript:void(0)"><img src="../plugins/images/users/genu.jpg" class="thumb-lg img-circle" alt="img"></a>
-                            <h4 class="text-white">Image here</h4>
-                            <h5 class="text-white">info@myadmin.com</h5>
+    <!-- ============================================================== -->
+    <!-- Wrapper -->
+    <!-- ============================================================== -->
+    <div id="wrapper">
+        <?php include_once("../widgets/header.php");?>
+
+        <?php include_once("../widgets/sidebar.php");?>
+        <!-- ============================================================== -->
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bang danh sach cac admin -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 ">
+                        <div class="white-box">
+                            <h3 class="box-title">Danh sách sản phẩm</h3>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="tabledit" >
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tựa sách</th>
+                                            <th>Giá</th>
+                                            <th>Mô tả</th>
+                                            <th>Ảnh bìa</th>
+                                            <th>Tác giả</th>
+                                            <th>Số lượng</th>
+                                            <th>Danh mục</th>
+                                            <th>Nhà xuất bản</th>
+                                            <th>Lần cuối cập nhật</th>
+                                            <th><button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseInsert" aria-expanded="false" aria-controls="collapseInsert"><i class=" fa fa-plus-square"></i>  Thêm</button></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+
+                            </div>
+                            <div>
+                                <nav aria-label="Page navigation">
+                                  <ul class="pagination">
+                                    <li>
+                                      <a href="#" class="disabled" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                      </a>
+                                    </li>
+                                    <li class="active"><a href="#">1<span class="sr-only">(current)</span></a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li>
+                                      <a href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </nav>
+                            </div>
+
+                            <script>
+                            function viewData(){
+                                $.ajax({
+                                    url: 'process.php?p=view',
+                                    method: 'GET'
+                                }).done(function(data){
+                                    $('tbody').html(data)
+                                    tableData()
+                                })
+                            }
+                            function tableData(){
+                                $('#tabledit').Tabledit({
+                                    url: 'process.php',
+                                    eventType: 'dblclick',
+                                    editButton: true,
+                                    deleteButton: true,
+                                    hideIdentifier: true,
+                                    buttons: {
+                                        edit: {
+                                            class: 'btn btn-sm btn-warning',
+                                            html: '<span class="glyphicon glyphicon-pencil"></span> Sửa',
+                                            action: 'edit'
+                                        },
+                                        delete: {
+                                            class: 'btn btn-sm btn-danger',
+                                            html: '<span class="glyphicon glyphicon-trash"></span> Xóa',
+                                            action: 'delete'
+                                        },
+                                        save: {
+                                            class: 'btn btn-sm btn-success',
+                                            html: 'Save'
+                                        },
+                                        restore: {
+                                            class: 'btn btn-sm btn-warning',
+                                            html: 'Restore',
+                                            action: 'restore'
+                                        },
+                                        confirm: {
+                                            class: 'btn btn-sm btn-default',
+                                            html: 'Confirm'
+                                        }
+                                    },
+                                    columns: {
+                                        identifier: [0, 'id'],
+                                            editable:[  [1, 'name'],
+                                                        [2,'price'],
+                                                        [3,'description'],
+                                                        [5,'author'],
+                                                        [6,'quantity'],
+                                                        [7,'category'],
+                                                        [8,'publisher']
+                                                    ]
+                                    },
+                                    onSuccess: function(data, textStatus, jqXHR) {
+                                        viewData()
+                                    },
+                                    onFail: function(jqXHR, textStatus, errorThrown) {
+                                        console.log('onFail(jqXHR, textStatus, errorThrown)');
+                                        console.log(jqXHR);
+                                        console.log(textStatus);
+                                        console.log(errorThrown);
+                                    },
+                                    onAjax: function(action, serialize) {
+                                        console.log('onAjax(action, serialize)');
+                                        console.log(action);
+                                        console.log(serialize);
+                                    }
+                                });
+                            }
+                            </script>
                         </div>
                     </div>
                 </div>
+    
+                <!-- ============================================================== -->
+                <!-- Them admin -->
+                <!-- ============================================================== -->
+                <!-- Hien thi ket qua sau khi them -->
+                <div id="result"></div>
 
-            </div>
-        </div>
+                <div class="container">
+                    <div class="row white-box collapse" id="collapseInsert">
 
-        <div class="col-md-8 col-xs-12">
-            <div class="white-box">
-                <form class="form-horizontal form-material">
-                    <div class="form-group">
-                        <label class="col-md-12">Tựa sách</label>
-                        <div class="col-md-12">
-                            <input type="text" name="name" class="form-control form-control-line"> </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="example-email" class="col-md-12">Giá bán</label>
-                        <div class="col-md-12">
-                            <input type="text" class="form-control form-control-line" name="price" id="example-email"> </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-12">Tác giả</label>
-                        <div class="col-md-12">
-                            <input type="text" name="author" class="form-control form-control-line"> </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-12">Thể loại</label>
-                        <div class="col-sm-12">
-                            <select class="form-control form-control-line">
-                               <?php
-                                    $i=1;
-                                    $category_list = getCategoryInfo();
-                                    foreach($category_list as $category){
-                                ?>
-                                <option><?php echo $category['categoryname']; ?></option>
-                                <?php } ?>
-                            </select>
+                        <div class="col-md-4 col-md-offset-4 col-xs-12">
+                            <div>
+                                <form class="form-horizontal form-material">
+                                    <div class="form-group">
+                                        <label class="col-md-12">Tựa sách</label>
+                                        <div class="col-md-12">
+                                            <input type="text" id="name" placeholder="Nhập tiêu đề sách" class="form-control form-control-line">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-12">Giá</label>
+                                        <div class="col-md-12">
+                                            <input type="number" id="price" placeholder="Nhập giá" class="form-control form-control-line">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-12">Tác giả</label>
+                                        <div class="col-md-12">
+                                            <div class="col-md-12">
+                                                <select class="form-control form-control-line"" id="author">
+                                                    <option>1</option>
+                                                    <option>1</option>
+                                                    <option>1</option>
+                                                    <option>1</option>
+                                                    
+                                                  </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-12">Số lượng</label>
+                                        <div class="col-md-12">
+                                            <input type="text" id="quantity" class="form-control form-control-line">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-12">Danh mục</label>
+                                        <div class="col-md-12">
+                                            <input type="text" id="category" class="form-control form-control-line">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-12">Nhà xuất bản</label>
+                                        <div class="col-md-12">
+                                            <select class="form-control form-control-line"" id="publisher">
+                                                <option>1</option>
+                                                
+                                              </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="col-md-12">Mô tả</label>
+                                        <div class="col-md-12">
+                                            <textarea type="text" rows="6" id="publisher" placeholder="Nhập mô tả sách..." class="form-control form-control-line"></textarea> 
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-12">Ảnh bìa</label>
+                                        <div class="col-md-12">
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <span class="button"><span>Choose file</span><input type="file" id="cover" /></span>
+                                                <span class="fileinput-filename"></span><span class="fileinput-new">No file chosen</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            <button name="addadmin" type="Submit" value="add" class="btn btn-success" onclick="addProduct()">Thêm</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-12">Nhà xuất bản</label>
-                        <div class="col-md-12">
-                            <input type="text" name="publisher" class="form-control form-control-line"> </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-12">Số lượng</label>
-                        <div class="col-md-12">
-                            <input type="text" name="publisher" class="form-control form-control-line"> </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-12">Mô tả</label>
-                        <div class="col-md-12">
-                            <textarea rows="5" class="form-control form-control-line"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-12">Ảnh bìa</label>
-                        <div class="col-md-12">
-                            <input class="form-control" type="file" name="cover">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <button name="add-product" type="Submit" value="add" class="btn btn-success">Thêm</button>
-                        </div>
-                    </div>
-                </form>
+
+                    <script type="text/javascript">
+                        function addProduct() {
+                            var name = $('#name').val();
+                            var price = $('#price').val();
+                            var author = $('#author').val();
+                            var quantity = $('#quantity').val();
+                            var category = $('#category').val();
+                            var description = $('#description').val();
+                            var cover = $('#cover').val();
+
+                            $.ajax({
+                                type: 'POST',
+                                url: 'process.php?p=add',
+                                data: {
+                                    name:           name,
+                                    price:          price,
+                                    author:         author,
+                                    quantity:       quantity,
+                                    category:       category,
+                                    description:    description,
+                                    cover:          cover
+                                },
+                                success: function(result){
+                                    $('#result').html(result);
+                                    alert("Them thanh cong");
+                                }
+                            });
+                        }
+
+                    </script>
+                </div>
             </div>
+            <!-- /.container-fluid -->
+            <?php include_once("../widgets/footer.php"); ?>
+
         </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
     </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <?php include_once('../components/script.php') ?>
 
-</div>
+</body>
+
+</html>

@@ -12,7 +12,7 @@ function checkUser()
 {
 	// Nếu phiên id không thiết lập, chuyển tới trang login
 	if (!isset($_SESSION['admin_id'])) {
-		header('Location: login.php');
+		header('Location: /bookadmin/modules/common/login.php');
 		exit();
 	}
 
@@ -82,7 +82,7 @@ function doLogout()
 		session_unregister('admin_id');
 	}
 
-	redirect('../modules/common/login.php');
+	header("Local: login.php");
 	exit();
 }
 
@@ -209,29 +209,18 @@ function getPagingNav($sql, $pageNum, $rowsPerPage, $queryString = '')
 	return $first . $prev . " Showing page <strong>$pageNum</strong> of <strong>$maxPage</strong> pages " . $next . $last;
 }
 
-//Ham lay danh sach khach hang
-function getUserInfo(){
-    return dbSelectALl('userinfo');   
-}
 
-//Ham lay danh sach admin
-function getAdminInfo(){
-    return dbSelectAll('admin');
-}
-
-//Ham lay danh sach tac gia
-function getAuthorInfo(){
-    return dbSelectAll('author');
-}
-
-//Ham lay danh sach don hang
-function getOrderList(){
-    return dbSelectAll('orderbook');
+//Ham lay thong tin sach
+function getBookInfo(){
+    $sql = "SELECT b.id, b.`bookname`, b.`price`, b.`description`, b.`cover`, b.`updated`, b.`quantity`, c.categoryname, p.publishername, a.authorname
+    FROM `book` AS b, author AS a, publisher AS p, category AS c
+    WHERE b.`publisherid` = p.id AND b.`authorid`= a.id AND b.`quantity`= c.id";
+    return dbQuery($sql);
 }
 
 //Ham lay so luong nguoi dung
 function getNumUsers(){
-   return dbCount('userinfo');
+   return dbCount('customer');
 }
 
 //Ham lay so luong hoa don
@@ -245,22 +234,5 @@ function getTotalPrices(){
     return dbQuery($sql);
 }
 
-//Ham lay thong tin sach
-function getBookInfo(){
-    $sql = "SELECT b.id, b.`bookname`, b.`price`, b.`description`, b.`cover`, b.`updated`, b.`quantity`, c.categoryname, p.publishername, a.authorname
-    FROM `book` AS b, author AS a, publisher AS p, category AS c
-    WHERE b.`publisherid` = p.id AND b.`authorid`= a.id AND b.`quantity`= c.id";
-    return dbQuery($sql);
-}
-
-//Ham lay thong tin cac danh muc sach
-function getCategoryInfo(){
-	return dbSelectAll('category');
-}
-
-//Ham lay thong tin cac nha xuat ban
-function getPublisherInfo(){
-	return dbSelectAll('publisher');
-}
 
 ?>

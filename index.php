@@ -14,7 +14,11 @@ $action = $_GET['a']??'';
 if(!isset($_SESSION['admin_id'])){
      header("location:modules/common/login.php");
 }else{
-    header("location:modules/common/main.php?a=".$action);
+   if (!empty($module) && !empty($acion)) {
+		header("location:modules/common/".$module."".$action);
+   }else{
+   		 header("location:modules/common/main.php");
+   }
 }
     
    

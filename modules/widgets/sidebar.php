@@ -5,7 +5,7 @@
         </div>
         <ul class="nav clearfix" id="side-menu">
             <li style="padding: 70px 0 0;">
-                <a href="main.php" class="waves-effect"><i class="fa fa-dashboard fa-fw" aria-hidden="true"></i>Dashboard</a>
+                <a href="../common/main.php" class="waves-effect"><i class="fa fa-dashboard fa-fw" aria-hidden="true"></i>Dashboard</a>
             </li>
             <li>
                 <a href="../admin/" class="waves-effect"><i class="fa fa-user fa-fw" aria-hidden="true"></i>Admin</a>

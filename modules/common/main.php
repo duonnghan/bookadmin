@@ -53,10 +53,10 @@ session_start();
                     <!-- ============================================================== -->
                     <!-- .row -->
                     <?php
-                    $num_order = getNumOrders();
-                    $num_user = getNumUsers();
-                    $total_prices = getTotalPrices();
-                ?>
+                        $num_order = getNumOrders();
+                        $num_user = getNumUsers();
+                        $total_prices = getTotalPrices();
+                    ?>
                         <div class="row">
                             <div class="col-lg-4 col-sm-6 col-xs-12">
                                 <div class="white-box analytics-info">
@@ -99,29 +99,13 @@ session_start();
                             </div>
                         </div>
 
-
-                        <!-- ============================================================== -->
-                        <!-- Noi dung trang -->
-                        <!-- ============================================================== -->
-                        <?php 
-                            $module = $_GET['m'] ?? '';
-                            $action = $_GET['a'] ?? '';
-                            $process = $GET['p'] ?? '';
-                    
-                            if(isset($module) && isset($action)){
-                                if(!empty($process)){
-                                    $pathPerform = "../$module/$action/process.php";
-                                    include_once($pathPerform);  
-                                }   
-                                $path = "../$module/$action/$action.php";
-                                var_dump($path);
-                                include_once($path);
-                            }
-                            
-                        ?>
-                        <!-- ============================================================== -->
-                        <!-- chat-listing & recent comments -->
-                        <!-- ============================================================== -->
+                    <h1 style="color:#ce3635; text-align: center;">
+                      <a href="" class="typewrite" data-period="1000" data-type='[ "Chào admin.", "Đây là trang quản trị web bán sách", "Các danh mục quản lí nằm bên trái", "Join now" ]'>
+                        <span class="wrap"></span>
+                      </a>
+                    </h1>
+                    <script type="text/javascript" src="../../js/textanimation.js"></script>
+                        
                 </div>
                 <!-- /.container-fluid -->
                 <?php include_once("../widgets/footer.php"); ?>

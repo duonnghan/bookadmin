@@ -1,7 +1,5 @@
 <?php
 
-    // Basic example of PHP script to handle with jQuery-Tabledit plug-in.
-    // Note that is just an example. Should take precautions such as filtering the input data.
 
     $conn = new mysqli('localhost', 'root', '', 'qlsach');
     mysqli_set_charset($conn,"utf8");
@@ -43,7 +41,7 @@
         $input = filter_input_array(INPUT_POST);
 
         if ($input['action'] === 'edit') {
-            $conn->query("UPDATE admin SET username='" . $input['user'] . "', password='" . $input['pass'] . "' WHERE id='" . $input['id'] . "'");
+            $conn->query("UPDATE admin SET username='" . $input['user'] ."' WHERE id='".$input['id'] . "'");
         } else if ($input['action'] === 'delete') {
             $conn->query("DELETE FROM admin WHERE id='" . $input['id'] . "'");
         }
