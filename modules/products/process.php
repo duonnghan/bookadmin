@@ -11,23 +11,17 @@
     $page = isset($_GET['p'])? $_GET['p'] : '';
 
     if ($page == 'add') {
+        
         $name           = $_POST['name'];
         $price          = $_POST['price'];
         $author         = $_POST['author'];
         $quantity       = $_POST['quantity'];
         $category       = $_POST['category'];
         $description    = $_POST['description'];
-        $cover          = $_POST['cover'];
+        $publisher      = $_POST['publisher'];
+        $image = addslashes(file_get_contents($_FILES["cover"]["tmp_name"]));
 
-        //mở file ảnh để đọc với chế độ đọc binary
-        $f = fopen($cover, "rb");
-        $imgContents = fread($f, filesize($imgFilename));
-        fclose($f);
-
-        //chèn nội dung file ảnh vào table imgConetnts
-        $conn->query("INSERT INTO products (cover) VALUES('" . mysql_real_escape_string($imgContents, $conn) . "')");
-
-        $result = $conn->query("INSERT INTO book(bookname, price, description, cover, quantity, categoryid, publisherid, authorid) VALUES ('$username', '$password')");
+        $result = $conn->query("INSERT INTO book(bookname, price, description, cover, quantity, categoryid, publisherid, authorid) VALUES ('$name', '$price', '$description', '$image','$quantity', '$category', '$publisher','$author')");
         if ($result) {   
             echo "Thêm sản phẩm thành công";
         }else
@@ -35,20 +29,22 @@
     }
 
     if ($page == 'view') {
-        $result = $conn->query("SELECT * FROM book");
+        $result = $conn->query("SELECT b.id, b.bookname, b.price, b.description, b.cover, b.updated, b.quantity, a.authorname, p.publishername, c.categoryname
+                                FROM book AS b, author AS a, publisher as p, category AS c
+                                WHERE b.categoryid = c.id AND b.publisherid = p.id AND b.authorid = a.id");
         while ($row = $result->fetch_assoc()){
             ?>
                 <tr>
-                    <td><?php echo $book['id']; ?></td>
-                    <td><?php echo $admin['bookname']; ?></td>
-                    <td><?php echo $admin['price']; ?></td>
-                    <td><?php echo $admin['authorname']; ?></td>
-                    <td><?php echo $admin['categoryname']; ?></td>
-                    <td><?php echo $admin['publishername']; ?></td>
-                    <td><?php echo $admin['quantity']; ?></td>
-                    <td><?php echo $admin['description']; ?></td>
-                    <td><?php echo $admin['cover']; ?>td>
-                    <td><?php echo $admin['updated']; ?></td>                
+                    <td><?php echo $row['id']; ?></td>
+                    <td><?php echo $row['bookname']; ?></td>
+                    <td><?php echo $row['price']; ?></td>
+                    <td><?php echo $row['authorname']; ?></td>
+                    <td><?php echo $row['categoryname']; ?></td>
+                    <td><?php echo $row['publishername']; ?></td>
+                    <td><?php echo $row['quantity']; ?></td>
+                    <td><?php echo $row['description']; ?></td>
+                    <td><img src="data:image/jpeg;base64,'.base64_encode($row['cover'] ).'" height="30" width="30" class="img-thumbnail" />td>
+                    <td><?php echo $row['updated']; ?></td>                
                 </tr>
             <?php
         }

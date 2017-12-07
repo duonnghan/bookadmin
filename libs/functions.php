@@ -218,6 +218,24 @@ function getBookInfo(){
     return dbQuery($sql);
 }
 
+function getAuthorInfo(){
+	$sql = "SELECT * FROM author";
+	$result = dbQuery($sql);
+	return $result;
+}
+
+function getPublisherInfo(){
+	$sql = "SELECT * FROM publisher";
+	$result = dbQuery($sql);
+	return $result;
+}
+
+function getCategoryInfo(){
+	$sql = "SELECT * FROM category";
+	$result = dbQuery($sql);
+	return $result;
+}
+
 //Ham lay so luong nguoi dung
 function getNumUsers(){
    return dbCount('customer');
