@@ -46,12 +46,12 @@ checkUser();
                                             <th>#</th>
                                             <th>Tựa sách</th>
                                             <th>Giá</th>
-                                            <th>Mô tả</th>
-                                            <th>Ảnh bìa</th>
                                             <th>Tác giả</th>
-                                            <th>Số lượng</th>
                                             <th>Danh mục</th>
                                             <th>Nhà xuất bản</th>
+                                            <th>Số lượng</th>
+                                            <th>Mô tả</th>
+                                            <th>Ảnh bìa</th>
                                             <th>Lần cuối cập nhật</th>
                                             <th><button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseInsert" aria-expanded="false" aria-controls="collapseInsert"><i class=" fa fa-plus-square"></i>  Thêm</button></th>
                                         </tr>
@@ -81,77 +81,6 @@ checkUser();
                                   </ul>
                                 </nav>
                             </div>
-
-                            <script>
-                            function viewData(){
-                                $.ajax({
-                                    url: 'process.php?p=view',
-                                    method: 'GET'
-                                }).done(function(data){
-                                    $('tbody').html(data)
-                                    tableData()
-                                })
-                            }
-                            function tableData(){
-                                $('#tabledit').Tabledit({
-                                    url: 'process.php',
-                                    eventType: 'dblclick',
-                                    editButton: true,
-                                    deleteButton: true,
-                                    hideIdentifier: true,
-                                    buttons: {
-                                        edit: {
-                                            class: 'btn btn-sm btn-warning',
-                                            html: '<span class="glyphicon glyphicon-pencil"></span> Sửa',
-                                            action: 'edit'
-                                        },
-                                        delete: {
-                                            class: 'btn btn-sm btn-danger',
-                                            html: '<span class="glyphicon glyphicon-trash"></span> Xóa',
-                                            action: 'delete'
-                                        },
-                                        save: {
-                                            class: 'btn btn-sm btn-success',
-                                            html: 'Save'
-                                        },
-                                        restore: {
-                                            class: 'btn btn-sm btn-warning',
-                                            html: 'Restore',
-                                            action: 'restore'
-                                        },
-                                        confirm: {
-                                            class: 'btn btn-sm btn-default',
-                                            html: 'Confirm'
-                                        }
-                                    },
-                                    columns: {
-                                        identifier: [0, 'id'],
-                                            editable:[  [1, 'name'],
-                                                        [2,'price'],
-                                                        [3,'description'],
-                                                        [5,'author'],
-                                                        [6,'quantity'],
-                                                        [7,'category'],
-                                                        [8,'publisher']
-                                                    ]
-                                    },
-                                    onSuccess: function(data, textStatus, jqXHR) {
-                                        viewData()
-                                    },
-                                    onFail: function(jqXHR, textStatus, errorThrown) {
-                                        console.log('onFail(jqXHR, textStatus, errorThrown)');
-                                        console.log(jqXHR);
-                                        console.log(textStatus);
-                                        console.log(errorThrown);
-                                    },
-                                    onAjax: function(action, serialize) {
-                                        console.log('onAjax(action, serialize)');
-                                        console.log(action);
-                                        console.log(serialize);
-                                    }
-                                });
-                            }
-                            </script>
                         </div>
                     </div>
                 </div>
@@ -258,7 +187,8 @@ checkUser();
 
                                     <div class="form-group">
                                         <div class="col-sm-12">
-                                            <button type="Submit" id="add_product" value="add" class="btn btn-success">Thêm</button>
+                                            <!-- <button type="Submit" id="add_product" value="add" class="btn btn-success">Thêm</button> -->
+                                            <input type="submit" value="Thêm" class="btn btn-success">
                                         </div>
                                     </div>
                                 </form>
@@ -284,9 +214,109 @@ checkUser();
 
 </html>
 
+<div id="bookModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <form id="modal_update_form" method="post" enctype="multipart/form-data">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Cập nhật thông tin</h4>
+            </div>
+
+                <div class="modal-body">
+                
+                    <input type="hidden" name="modal_id" id="modal_id" />
+                    <div class="form-group">
+                        <label>Tựa sách</label>
+                        <input type="text" class="form-control" id="modal_name" name="modal_name"><br>
+                    </div>
+                    <div class="form-group">
+                        <label>Giá</label>
+                        <input type="text" class="form-control" id="modal_price" name="modal_price"><br>
+                    </div>
+                    <div class="form-group">
+                        <label>Tác giả</label>
+                        <select class="form-control" name="modal_author" id="modal_author">
+                        <?php
+                            $authorLst = getAuthorInfo();
+                            foreach($authorLst as $author){
+                                ?>
+                                    <option value="<?php echo $author['id'] ?>"><?php echo $author['authorname'] ?></option>
+                                <?php
+                            }
+                        ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Số lượng</label>
+                        <input type="text" class="form-control" id="modal_quantity" id="modal_quantity"><br>
+                    </div>
+                    <div class="form-group">
+                        <label>Danh mục</label>
+                        <select class="form-control" id="modal_category" name="modal_category">
+                        <?php
+                            $categoryLst = getCategoryInfo();
+                            foreach($categoryLst as $category){
+                                ?>
+                                    <option value="<?php echo $category['id'] ?>"><?php echo $category['categoryname'] ?></option>
+                                <?php
+                            }
+                        ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nhà xuất bản</label>
+                        <select class="form-control" id="modal_publisher" name="modal_publisher">
+                         <?php
+                            $publisherLst = getPublisherInfo();
+                            foreach($publisherLst as $publisher){
+                                ?>
+                                    <option value="<?php echo $publisher['id'] ?>"><?php echo $publisher['publishername'] ?></option>
+                                <?php
+                            }
+                        ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mô tả</label>
+                        <textarea class="form-control" id="modal_description" name="modal_description"></textarea><br>
+                    </div>
+                    <div class="form-group">
+                        <label>Ảnh bìa</label>
+                        <input type="file" name="modal_cover" id="modal_cover"/><br>
+                        <span id="book_uploaded_image"></span>
+                    </div>
+                
+                </div>
+
+            <div class="modal-footer">
+                <input type="submit" name="update" id="update" value="Cập nhật" class="btn btn-info" />
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+
+        </div>
+        </form>
+    </div>
+</div>
+
 <script type="text/javascript">
 
     $(document).ready(function(){
+
+        fetch_data();
+
+        function fetch_data(){
+            $.ajax({
+                url:"process.php?p=view",
+                method:"POST",
+                success:function(data){
+                    $('tbody').html(data);
+                }
+            })
+        }
+
+        
+
         $('form#insert_form').submit(function (e) {
             e.preventDefault();
             var formData = new FormData(this);
@@ -310,7 +340,9 @@ checkUser();
                     method: "POST",
                     data: formData,
                     success: function (data) {
-                        location.reload();
+                        fetch_data();
+                        $('#insert_form')[0].reset();
+                        $('#collapseInsert').toggle();
                     },
                     cache: false,
                     contentType: false,
@@ -319,6 +351,84 @@ checkUser();
             }
 
         });
+
+        $('form#modal_update_form').submit(function(e){
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            var cover = $('#modal_cover').val();
+            if (cover != ''){
+                //Dinh dang cua anh
+                var extension = $('#modal_cover').val().split('.').pop().toLowerCase();
+                //Neu anh upload khong thuoc cac dinh dang thong tuong
+                if(jQuery.inArray(extension, ['gif','png','jpg','jpeg']) == -1){
+                    alert("Định dạng file ảnh không hợp lệ");
+                    $('#cover').val('');
+                    return false;
+                }
+            }
+
+            $.ajax({
+                url: "process.php?p=update",
+                method: "POST",
+                data: formData,
+                success: function (data) {
+                    $('#bookModal').modal('hide');
+                    $('#bookModal')[0].reset();
+                    fetch_data();
+                    location.reload();
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+
+
+        $(document).on('click', '.update', function(){
+            var book_id = $(this).attr("id");
+
+            $.ajax({
+                url: "process.php?p=fetch_book",
+                method: "POST",
+                data:{ book_id: book_id},
+                dataType: "json",
+                success: function(data){
+                    $('#modal_name').val(data.name);
+                    $('#modal_price').val(data.price);
+                    $('#modal_authorid').val(data.authorid);
+                    $('#modal_quantity').val(data.quantity);
+                    $('#modal_publisherid').val(data.publisherid);
+                    $('#modal_categoryid').val(data.categoryid);
+                    $('#modal_description').val(data.description);
+                    $('#book_uploaded_image').html(data.cover);
+                    $('#bookModal').modal('show');
+                }
+            })
+        });
+
+        $(document).on('click', '.delete', function(){
+                var book_id = $(this).attr("id");
+                if(confirm("Bạn có muốn chắc chắn muốn xóa bản ghi không?"))
+                {
+                    $.ajax({
+                        url:"process.php?p=delete",
+                        method:"POST",
+                        data:{book_id: book_id},
+                        success:function(data){
+                            alert(data);
+                            location.reload();
+                            fetch_data();
+                        }
+                   })
+               }
+               else
+               {
+                 return false;
+               }
+            });
+
     });
 
+    
 </script>

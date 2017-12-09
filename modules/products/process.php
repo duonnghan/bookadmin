@@ -1,5 +1,4 @@
 <?php
-    
     $conn = new mysqli('localhost', 'root', '', 'qlsach');
     mysqli_set_charset($conn,"utf8");
 
@@ -32,36 +31,97 @@
         $result = $conn->query("SELECT b.id, b.bookname, b.price, b.description, b.cover, b.updated, b.quantity, a.authorname, p.publishername, c.categoryname
                                 FROM book AS b, author AS a, publisher as p, category AS c
                                 WHERE b.categoryid = c.id AND b.publisherid = p.id AND b.authorid = a.id");
-        while ($row = $result->fetch_assoc()){
-            ?>
-                <tr>
-                    <td><?php echo $row['id']; ?></td>
-                    <td><?php echo $row['bookname']; ?></td>
-                    <td><?php echo $row['price']; ?></td>
-                    <td><?php echo $row['authorname']; ?></td>
-                    <td><?php echo $row['categoryname']; ?></td>
-                    <td><?php echo $row['publishername']; ?></td>
-                    <td><?php echo $row['quantity']; ?></td>
-                    <td><?php echo $row['description']; ?></td>
-                    <td><img src="data:image/jpeg;base64,'.base64_encode($row['cover'] ).'" height="30" width="30" class="img-thumbnail" />td>
-                    <td><?php echo $row['updated']; ?></td>                
-                </tr>
-            <?php
+        $output = '';
+
+        while($row = mysqli_fetch_array($result))
+        {
+            $output .= '
+
+            <tr>
+            <td>'.$row["id"].'</td>
+            <td>'.$row["bookname"].'</td>
+            <td>'.$row["price"].'</td>
+            <td>'.$row["authorname"].'</td>
+            <td>'.$row["categoryname"].'</td>
+            <td>'.$row["publishername"].'</td>
+            <td>'.$row["quantity"].'</td>
+            <td>'.$row["description"].'</td>
+            <td>
+            <img src="data:image/jpeg;base64,'.base64_encode($row['cover'] ).'" height="60" width="75" class="img-thumbnail" />
+            </td>
+            <td>'.$row["updated"].'</td>
+            <td><button type="button" name="update" class="btn btn-warning bt-xs update" id="'.$row["id"].'"><span class="glyphicon glyphicon-pencil"></span> Sửa</button></td>
+            <td><button type="button" name="delete" class="btn btn-danger bt-xs delete" id="'.$row["id"].'"><span class="glyphicon glyphicon-trash"></span> Xóa</button></td>
+            </tr>
+            ';
         }
-    }else{
-
-        header('Content-Type: application/json');
-        $input = filter_input_array(INPUT_POST);
-
-        if ($input['action'] === 'edit') {
-            $conn->query("UPDATE products SET bookname='" . $input['name'] .", price = '".$input['price']."', authorname='".index['author'].", description ='".$input['description']. "WHERE id='".$input['id'] . "'");
-        } else if ($input['action'] === 'delete') {
-            $conn->query("DELETE FROM admin WHERE id='" . $input['id'] . "'");
-        }
-
-        $conn->close();
-        echo json_encode($input);
+        echo $output;
     }
 
+    if ($page == 'fetch_book') {
+
+        if (isset($_POST['book_id'])) {
+            $output = array();
+
+            $result = $conn -> query("SELECT * FROM book WHERE id = '".$_POST['book_id']."' LIMIT 1");
+            if ($result) {
+                $row = $result -> fetch_assoc();
+
+                $output['id'] = $_POST['book_id'];
+                $output['name'] = $row['bookname'];
+                $output['price'] = $row['price'];
+                $output['quantity'] = $row['quantity'];
+                $output['authorid'] = $row['authorid'];
+                $output['publisherid'] = $row['publisherid'];
+                $output['categoryid'] = $row['categoryid'];
+                $output['description'] = $row['description'];
+
+                if ($row['cover'] != '') {
+                    $output['cover'] = '<img src="data:image/jpeg;base64,'.base64_encode($row['cover'] ).'" height="60" width="75" class="img-thumbnail" />';
+                }else{
+                   $output['cover'] = '<input type="hidden" name="hidden_book_image" value="" />';
+                }
+
+
+            }
+            echo json_encode($output);
+        }
+    }
     
+    if ($page == 'delete') {
+        
+        $sql = "DELETE FROM book WHERE id = '".$_POST["book_id"]."'";
+        if($conn->query($sql))
+        {
+            echo 'Đã xóa thành công';
+        }
+    }
+
+    if ($page == 'update') {
+
+        $id             = $_POST['modal_id'];
+        $name           = $_POST['modal_name'];
+        $price          = $_POST['modal_price'];
+        $author         = $_POST['modal_author'];
+        $quantity       = $_POST['modal_quantity'];
+        $category       = $_POST['modal_category'];
+        $description    = $_POST['modal_description'];
+        $publisher      = $_POST['modal_publisher'];
+       
+
+        if ($_POST['modal_cover'] != '') {
+            $image = addslashes(file_get_contents($_FILES["modal_cover"]["tmp_name"]));
+            $result = $conn->query("UPDATE book SET cover='$image' WHERE id='$id' ");
+        }
+
+        $sql = "UPDATE book SET bookname = '$file', price ='$price',description='$description', quantity='$quantity', categoryid='$category', publisherid='$publisher', authorid='$author'  WHERE id = '$id'";
+        
+        $result = $conn->query($sql);
+        if ($result) {   
+            echo "Cập nhật sản phẩm thành công";
+        }else
+            echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+
 ?>
