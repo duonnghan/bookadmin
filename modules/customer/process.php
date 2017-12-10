@@ -28,10 +28,10 @@
     }
 
     if ($page == 'view') {
-        $id = $_GET['id'] ?? '';
-        if (!empty($id)) {
-            $result = $conn->query("SELECT * FROM customer WHERE id='$id'");
-        }else
+        // $id = $_GET['id'] ?? '';
+        // if (!empty($id)) {
+        //     $result = $conn->query("SELECT * FROM customer WHERE id='$id'");
+        // }else
             $result = $conn->query("SELECT * FROM customer");
         
         while ($row = $result->fetch_assoc()){

@@ -114,7 +114,7 @@
             $result = $conn->query("UPDATE book SET cover='$image' WHERE id='$id' ");
         }
 
-        $sql = "UPDATE book SET bookname = '$file', price ='$price',description='$description', quantity='$quantity', categoryid='$category', publisherid='$publisher', authorid='$author'  WHERE id = '$id'";
+        $sql = "UPDATE book SET bookname = '$name', price ='$price',description='$description', quantity='$quantity', categoryid='$category', publisherid='$publisher', authorid='$author'  WHERE id = '$id'";
         
         $result = $conn->query($sql);
         if ($result) {   

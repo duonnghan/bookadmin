@@ -58,10 +58,7 @@ session_start();
                             function viewData(){
                                 $.ajax({
                                     url: 'process.php?p=view',
-                                    method: 'GET',
-                                    data: {
-                                        id: id
-                                    }
+                                    method: 'GET'
                                 }).done(function(data){
                                     $('tbody').html(data)
                                     tableData()

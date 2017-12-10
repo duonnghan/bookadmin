@@ -15,40 +15,93 @@
 
         $name = $_POST['name'];
         $address = $_POST['address'];
-        $bio = $_POST['bio'];
+        $bio = addslashes($_POST['bio']);
+        $image = addslashes(file_get_contents($_FILES["image"]["tmp_name"]));
 
-        $result = $conn->query("INSERT INTO author(authorname, address, bio) VALUES ('$name', '$address', '$bio')");
+        $result = $conn->query("INSERT INTO author(authorname, address, bio, avatar) VALUES ('$name', '$address', '$bio','$image')");
         if ($result) {
             echo "Thêm tác giả thành công";
         }else
             echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
+
     if ($page == 'view') {
+
         $result = $conn->query("SELECT * FROM author");
+        $output = '';
+
         while ($row = $result->fetch_assoc()){
-            ?>
-                <tr>
-                    <td><?php echo $row['id'] ?></td>
-                    <td><?php echo $row['authorname'] ?></td>
-                    <td><?php echo $row['address'] ?></td>
-                    <td><?php echo $row['bio'] ?></td>                
-                </tr>
-            <?php
+            $output .= '
+
+            <tr>
+            <td>'.$row["id"].'</td>
+            <td>'.$row["authorname"].'</td>
+            <td>'.$row["address"].'</td>
+            <td>'.$row["bio"].'</td>
+            <td>
+            <img src="data:image/jpeg;base64,'.base64_encode($row['avatar'] ).'" height="60" width="75" class="img-thumbnail" />
+            </td>
+            <td><button type="button" name="update" class="btn btn-warning bt-xs update" id="'.$row["id"].'"><span class="glyphicon glyphicon-pencil"></span> Sửa</button></td>
+            <td><button type="button" name="delete" class="btn btn-danger bt-xs delete" id="'.$row["id"].'"><span class="glyphicon glyphicon-trash"></span> Xóa</button></td>
+            </tr>
+            ';
         }
-    }else{
+    }
 
-        header('Content-Type: application/json');
-        $input = filter_input_array(INPUT_POST);
+    if ($page == 'fetch_author') {
 
-        if ($input['action'] === 'edit') {
-            $conn->query("UPDATE author SET authorname='" . $input['name'] . "', address='" . $input['address'] . "', bio='" . $input['bio'] . "' WHERE id='" . $input['id'] . "'");
-        } else if ($input['action'] === 'delete') {
-            $conn->query("DELETE FROM author WHERE id='" . $input['id'] . "'");
+        if (isset($_POST['author_id'])) {
+            $output = array();
+
+            $result = $conn -> query("SELECT * FROM author WHERE id = '".$_POST['author_id']."' LIMIT 1");
+            if ($result) {
+                $row = $result -> fetch_assoc();
+
+                $output['id'] = $_POST['author_id'];
+                $output['name'] = $row['authorname'];
+                $output['address'] = $row['address'];
+                $output['bio'] = $row['bio'];
+                if ($row['cover'] != '') {
+                    $output['image'] = '<img src="data:image/jpeg;base64,'.base64_encode($row['avatar'] ).'" height="60" width="75" class="img-thumbnail" />';
+                }else{
+                   $output['image'] = '<input type="hidden" name="hidden_author_image" value="" />';
+                }
+
+
+            }
+            echo json_encode($output);
+        }
+    }
+    
+    if ($page == 'delete') {
+        
+        $sql = "DELETE FROM author WHERE id = '".$_POST["author_id"]."'";
+        if($conn->query($sql))
+        {
+            echo 'Đã xóa thành công';
+        }
+    }
+
+    if ($page == 'update') {
+
+        $id             = $_POST['modal_id'];
+        $name           = $_POST['modal_name'];
+        $addres         = $_POST['modal_addres'];
+        $bio            = $_POST['modal_bio'];
+    
+        if ($_POST['modal_image'] != '') {
+            $image = addslashes(file_get_contents($_FILES["modal_image"]["tmp_name"]));
+            $result = $conn->query("UPDATE author SET avatar='$image' WHERE id='$id' ");
         }
 
-        $conn->close();
-        echo json_encode($input);
+        $sql = "UPDATE author SET authorname = '$name', address ='$address',bio='$bio WHERE id = '$id'";
+        
+        $result = $conn->query($sql);
+        if ($result) {   
+            echo "Cập nhật tác giả thành công";
+        }else
+            echo "Error: " . $sql . "<br>" . $conn->error;
     }
 ?>
 
