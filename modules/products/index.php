@@ -342,7 +342,7 @@ checkUser();
                     success: function (data) {
                         fetch_data();
                         $('#insert_form')[0].reset();
-                        $('#collapseInsert').toggle();
+                        // $('#collapseInsert').toggle();
                     },
                     cache: false,
                     contentType: false,

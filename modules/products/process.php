@@ -16,7 +16,7 @@
         $author         = $_POST['author'];
         $quantity       = $_POST['quantity'];
         $category       = $_POST['category'];
-        $description    = $_POST['description'];
+        $description    = addslashes($_POST['description']);
         $publisher      = $_POST['publisher'];
         $image = addslashes(file_get_contents($_FILES["cover"]["tmp_name"]));
 
