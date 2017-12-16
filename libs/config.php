@@ -8,6 +8,8 @@
     $dbUser = 'root';
     $dbPass = '';
     $dbName = 'qlsach';
+    //So record hien thi tren trang
+    $limit = 10;
     
     // tùy chỉnh web root và server root cho ứng dụng book shopping cart
     //__FILE__: đường dẫn đến tập tin hiện tại

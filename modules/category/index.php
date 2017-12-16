@@ -3,6 +3,8 @@ define("IN_SITE", true);
 include_once("../../libs/functions.php");
 session_start();
 
+$current_page = $_GET['page'] ?? 1;
+
 ?>
 
 <!DOCTYPE html>
@@ -113,12 +115,34 @@ session_start();
                                 });
                             }
                             </script>
+
+                            <div>
+                                <nav aria-label="Page navigation">
+                                  <ul class="pagination">
+                                    <li>
+                                      <a href="#" class="disabled" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                      </a>
+                                    </li>
+                                    <li class="active"><a href="#">1<span class="sr-only">(current)</span></a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li>
+                                      <a href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>
     
                 <!-- ============================================================== -->
-                <!-- Thêm admin -->
+                <!-- Thêm danh muc -->
                 <!-- ============================================================== -->
                 <!-- Hien thi ket qua sau khi them -->
                 <div id="result"></div>
