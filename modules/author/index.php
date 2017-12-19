@@ -45,6 +45,7 @@ checkUser();
                                         <tr>
                                             <th>#</th>
                                             <th>Tên tác giả</th>
+                                            <th>Ngày sinh</th>
                                             <th>Địa chỉ</th>
                                             <th>Tiểu sử</th>
                                             <th>Ảnh</th>

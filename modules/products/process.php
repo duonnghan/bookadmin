@@ -1,4 +1,5 @@
 <?php
+    // include_once("../../libs/functions.php");
     $conn = new mysqli('localhost', 'root', '', 'qlsach');
     mysqli_set_charset($conn,"utf8");
 
@@ -28,10 +29,27 @@
     }
 
     if ($page == 'view') {
-        $result = $conn->query("SELECT b.id, b.bookname, b.price, b.description, b.cover, b.updated, b.quantity, a.authorname, p.publishername, c.categoryname
+        // $perPage = new PerPage();
+        $sql = "SELECT b.id, b.bookname, b.price, b.description, b.cover, b.updated, b.quantity, a.authorname, p.publishername, c.categoryname
                                 FROM book AS b, author AS a, publisher as p, category AS c
-                                WHERE b.categoryid = c.id AND b.publisherid = p.id AND b.authorid = a.id");
+                                WHERE b.categoryid = c.id AND b.publisherid = p.id AND b.authorid = a.id";
+
+        // $paginationlink = "index.php?page=";
+        // $page = 1;
+        //     if(!empty($_GET["page"])) {
+        //         $page = $_GET["page"];
+        // }
+
+        // $start = ($page-1)*$perPage->perpage;
+        // if($start < 0) $start = 0;
+
+        // $sql =  $sql . " limit " . $start . "," . $perPage->perpage; 
+
+        $result = $conn->query($sql);
         $output = '';
+        // if(empty($_GET["rowcount"])) {
+        //     $_GET["rowcount"] = $result->num_rows;
+        // }
 
         while($row = mysqli_fetch_array($result))
         {
@@ -55,6 +73,8 @@
             </tr>
             ';
         }
+
+
         echo $output;
     }
 
@@ -121,6 +141,11 @@
             echo "Cập nhật sản phẩm thành công";
         }else
             echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    if ($page == 'pagination') {
+        $perPage = new PerPage();
+
     }
 
 

@@ -108,105 +108,88 @@ function createThumbnail($srcFile, $destFile, $width, $quality = 75)
 	return basename($thumbnail);
 }
 
-/*
-	Cop ảnh tới file đích. Cỡ ảnh được thiết lập $w X $h pixel
-*/
-function copyImage($srcFile, $destFile, $w, $h, $quality = 75)
-{
-    $tmpSrc     = pathinfo(strtolower($srcFile));
-    $tmpDest    = pathinfo(strtolower($destFile));
-    $size       = getimagesize($srcFile);
 
-    if ($tmpDest['extension'] == "gif" || $tmpDest['extension'] == "jpg")
-    {
-       $destFile  = substr_replace($destFile, 'jpg', -3);
-       $dest      = imagecreatetruecolor($w, $h);
-       imageantialias($dest, TRUE);
-    } elseif ($tmpDest['extension'] == "png") {
-       $dest = imagecreatetruecolor($w, $h);
-       imageantialias($dest, TRUE);
-    } else {
-      return false;
-    }
-
-    switch($size[2])
-    {
-       case 1:       //GIF
-           $src = imagecreatefromgif($srcFile);
-           break;
-       case 2:       //JPEG
-           $src = imagecreatefromjpeg($srcFile);
-           break;
-       case 3:       //PNG
-           $src = imagecreatefrompng($srcFile);
-           break;
-       default:
-           return false;
-           break;
-    }
-
-    imagecopyresampled($dest, $src, 0, 0, 0, 0, $w, $h, $size[0], $size[1]);
-
-    switch($size[2])
-    {
-       case 1:
-       case 2:
-           imagejpeg($dest,$destFile, $quality);
-           break;
-       case 3:
-           imagepng($dest,$destFile);
-    }
-    return $destFile;
-
-}
 
 /*********************************************************
 	Tạo link phân trang
 *************************************************************/
-function getPagingNav($sql, $pageNum, $rowsPerPage, $queryString = '')
-{
-	$result  = dbQuery($sql);
-	$row     = dbFetchArray($result, MYSQL_ASSOC);
-	$numrows = $row['numrows'];
-
-	// số trang ta có khi phân trang
-	$maxPage = ceil($numrows/$rowsPerPage);
-
-	$self = $_SERVER['PHP_SELF'];
-
-	// Tạo link 'previous' và 'next'
-	// 'first page' và 'last page'
-
-	// In ra 'previous' chỉ khi không ở trang 1
-	if ($pageNum > 1)
-	{
-		$page = $pageNum - 1;
-		$prev = " <a href=\"$self?page=$page{$queryString}\">[Prev]</a> ";
-
-		$first = " <a href=\"$self?page=1{$queryString}\">[First Page]</a> ";
+class PerPage {
+	public $perpage;
+	
+	function __construct() {
+		$this->perpage = 10;
 	}
-	else
-	{
-		$prev  = ' [Prev] ';       // Ở trang 1, không bật 'previous' link
-		$first = ' [First Page] '; // và không 'first page' link
+	
+	function getAllPageLinks($count) {
+		$output = '';
+		if(!isset($_GET["page"])) $_GET["page"] = 1;
+		if($this->perpage != 0)
+			$pages  = ceil($count/$this->perpage);
+		if($pages>1) {
+			if($_GET["page"] == 1) 
+				$output = $output . '<span class="link first disabled">&#8810;</span><span class="link disabled">&#60;</span>';
+			else	
+				$output = $output . '<a class="link first" onclick="fetch_data(\''  . (1) . '\')" >&#8810;</a><a class="link" onclick="fetch_data(\''  . ($_GET["page"]-1) . '\')" >&#60;</a>';
+			
+			
+			if(($_GET["page"]-3)>0) {
+				if($_GET["page"] == 1)
+					$output = $output . '<span id=1 class="link current">1</span>';
+				else				
+					$output = $output . '<a class="link" onclick="fetch_data(\''  . '1\')" >1</a>';
+			}
+			if(($_GET["page"]-3)>1) {
+					$output = $output . '<span class="dot">...</span>';
+			}
+			
+			for($i=($_GET["page"]-2); $i<=($_GET["page"]+2); $i++)	{
+				if($i<1) continue;
+				if($i>$pages) break;
+				if($_GET["page"] == $i)
+					$output = $output . '<span id='.$i.' class="link current">'.$i.'</span>';
+				else				
+					$output = $output . '<a class="link" onclick="fetch_data(\''  . $i . '\')" >'.$i.'</a>';
+			}
+			
+			if(($pages-($_GET["page"]+2))>1) {
+				$output = $output . '<span class="dot">...</span>';
+			}
+			if(($pages-($_GET["page"]+2))>0) {
+				if($_GET["page"] == $pages)
+					$output = $output . '<span id=' . ($pages) .' class="link current">' . ($pages) .'</span>';
+				else				
+					$output = $output . '<a class="link" onclick="fetch_data(\''  .  ($pages) .'\')" >' . ($pages) .'</a>';
+			}
+			
+			if($_GET["page"] < $pages)
+				$output = $output . '<a  class="link" onclick="fetch_data(\''  . ($_GET["page"]+1) . '\')" >></a><a  class="link" onclick="fetch_data(\''  . ($pages) . '\')" >&#8811;</a>';
+			else				
+				$output = $output . '<span class="link disabled">></span><span class="link disabled">&#8811;</span>';
+			
+			
+		}
+		return $output;
 	}
-
-	// in ra 'next' link chỉ khi không ở trang cuối
-	if ($pageNum < $maxPage)
-	{
-		$page = $pageNum + 1;
-		$next = " <a href=\"$self?page=$page{$queryString}\">[Next]</a> ";
-
-		$last = " <a href=\"$self?page=$maxPage{$queryString}{$queryString}\">[Last Page]</a> ";
+	function getPrevNext($count) {
+		$output = '';
+		if(!isset($_GET["page"])) $_GET["page"] = 1;
+		if($this->perpage != 0)
+			$pages  = ceil($count/$this->perpage);
+		if($pages>1) {
+			if($_GET["page"] == 1) 
+				$output = $output . '<span class="link disabled first">Prev</span>';
+			else	
+				$output = $output . '<a class="link first" onclick="fetch_data(\''  . ($_GET["page"]-1) . '\')" >Prev</a>';			
+			
+			if($_GET["page"] < $pages)
+				$output = $output . '<a  class="link" onclick="fetch_data(\''  . ($_GET["page"]+1) . '\')" >Next</a>';
+			else				
+				$output = $output . '<span class="link disabled">Next</span>';
+			
+			
+		}
+		return $output;
 	}
-	else
-	{
-		$next = ' [Next] ';      // ở trang cuối, không bật 'next' link
-		$last = ' [Last Page] '; // và không 'last page' link
-	}
-
-	// trả về trang thường
-	return $first . $prev . " Showing page <strong>$pageNum</strong> of <strong>$maxPage</strong> pages " . $next . $last;
 }
 
 

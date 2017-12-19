@@ -22,7 +22,7 @@
                         <input type="text" placeholder="Tìm kiếm..." class="form-control"> <a href=""><i class="fa fa-search"></i></a> </form>
                 </li>
                 <li>
-                    <a class="profile-pic" href="#"> <img src="../../plugins/images/avatar/tux.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs"><?php echo $_SESSION['admin_id'];?></b></a>
+                    <a class="profile-pic" href="#"> <img src="../../plugins/images/avatar/user.png" alt="user-img" width="36" class="img-circle"><b class="hidden-xs"><?php echo $_SESSION['admin_id'];?></b></a>
                 </li>
                 <li>
                     <a href="/bookadmin/modules/common/logout.php"><b>Đăng xuất</b></a>

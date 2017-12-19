@@ -1,4 +1,4 @@
-    <link rel="icon" type="image/png" sizes="16x16" href="../../img/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../plugins/images/favicon.png">
    <!-- Bootstrap Core CSS -->
     <link href="../../css/bootstrap.min.css" rel="stylesheet">
     <!-- Menu CSS -->

@@ -16,9 +16,34 @@ checkUser();
     <meta name="author" content="">
     <title>Người quản trị</title>
     <?php include_once('../components/style.php') ?>
+    <script>
+        function getresult(url) {
+            $.ajax({
+                url: url,
+                type: "GET",
+                data:  {rowcount:$("#rowcount").val()},
+                beforeSend: function(){$("#overlay").show();},
+                success: function(data){
+                    $("#pagination-result").html(data);
+                    setInterval(function() {$("#overlay").hide(); },500);
+                },
+                error: function() 
+                {}          
+           });
+        }
+        
+    </script>
 </head>
 
 <body class="fix-header" onload="viewData()">
+    <!-- ============================================================== -->
+    <!-- Preloader -->
+    <!-- ============================================================== -->
+    <div class="preloader" id="overlay">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+        </svg>
+    </div>
 
     <!-- ============================================================== -->
     <!-- Wrapper -->
@@ -60,27 +85,10 @@ checkUser();
                                 </table>
 
                             </div>
-                            <div>
-                                <nav aria-label="Page navigation">
-                                  <ul class="pagination">
-                                    <li>
-                                      <a href="#" class="disabled" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                      </a>
-                                    </li>
-                                    <li class="active"><a href="#">1<span class="sr-only">(current)</span></a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li><a href="#">5</a></li>
-                                    <li>
-                                      <a href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                      </a>
-                                    </li>
-                                  </ul>
-                                </nav>
+                            <div id="pagination-result">
+                                <input type="hidden" name="rowcount" id="rowcount" />
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -303,14 +311,17 @@ checkUser();
 
     $(document).ready(function(){
 
-        fetch_data();
+        fetch_data(1);
 
-        function fetch_data(){
+        function fetch_data(page){
+            var currentPage = page;
             $.ajax({
                 url:"process.php?p=view",
                 method:"POST",
+                beforeSend: function(){$("#overlay").show();},
                 success:function(data){
                     $('tbody').html(data);
+                    setInterval(function() {$("#overlay").hide(); },500);
                 }
             })
         }

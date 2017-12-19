@@ -37,6 +37,7 @@
             <tr>
             <td>'.$row["id"].'</td>
             <td>'.$row["authorname"].'</td>
+            <td>'.$row["dob"].'</td>
             <td>'.$row["address"].'</td>
             <td>'.$row["bio"].'</td>
             <td>
@@ -47,6 +48,8 @@
             </tr>
             ';
         }
+
+        echo $output;
     }
 
     if ($page == 'fetch_author') {
