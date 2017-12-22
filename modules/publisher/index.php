@@ -40,34 +40,21 @@ session_start();
                         <div class="white-box">
                             <h3 class="box-title">Danh sách các nhà xuất bản</h3>
                             <div class="table-responsive">
-                                <table class="table table-hover" id="tabledit" >
-                                    <thead>
-                                        <tr class="active">
-                                            <th>#</th>
-                                            <th>Tên NXB</th>
-                                            <th>Địa chỉ</th>
-                                            <th>Số điện thoại</th>
-                                            <th>Hành động</th>
-                                            <th><button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd"><i class=" fa fa-plus-square"></i>  Thêm</button></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
                             </div>
-                            <!-- <script src="../../js/jquery.min.js"></script>
-                            <script src="../../js/bootstrap.min.js"></script>
-                            <script src="../../js/jquery.tabledit.js"></script> -->
+                            
                             <script>
-                            function viewData(){
+                                
+                            function viewData(page){
                                 $.ajax({
                                     url: 'process.php?p=view',
-                                    method: 'GET'
+                                    method: 'GET',
+                                    data:{page:page}
                                 }).done(function(data){
-                                    $('tbody').html(data)
-                                    tableData()
+                                    $('.table-responsive').html(data)
+                                    tableData(page)
                                 })
                             }
-                            function tableData(){
+                            function tableData(page){
                                 $('#tabledit').Tabledit({
                                     url: 'process.php',
                                     eventType: 'dblclick',
@@ -99,7 +86,7 @@ session_start();
                                         editable: [[1, 'name'],[2, 'address'],[3, 'phone']]
                                     },
                                     onSuccess: function(data, textStatus, jqXHR) {
-                                        viewData()
+                                        viewData(page)
                                     },
                                     onFail: function(jqXHR, textStatus, errorThrown) {
                                         console.log('onFail(jqXHR, textStatus, errorThrown)');
@@ -114,13 +101,19 @@ session_start();
                                     }
                                 });
                             }
+
+                            // $(document).on('click', '.pagination_link', function(){
+                            //     var page = $(this).attr("id");
+                            //     alert(page);
+                            //     viewData(page);
+                            // });
                             </script>
                         </div>
                     </div>
                 </div>
     
                 <!-- ============================================================== -->
-                <!-- Them admin -->
+                <!-- Them nha xuat ban -->
                 <!-- ============================================================== -->
                 <!-- Hien thi ket qua sau khi them -->
                 <div id="result"></div>

@@ -40,34 +40,20 @@ session_start();
                         <div class="white-box">
                             <h3 class="box-title">Danh sách các khách hàng</h3>
                             <div class="table-responsive">
-                                <table class="table table-hover" id="tabledit" >
-                                    <thead>
-                                        <tr class="active">
-                                            <th>Mã đơn hàng</th>
-                                            <th>Tên khách hàng</th>
-                                            <th>Ngày đặt hàng</th>
-                                            <th>Ngày giao hàng</th>
-                                            <th>Tình trạng thanh toán</th>
-                                            <th>Tình trạng giao hàng</th>
-                                            <th>Hành động</th>
-                                            
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
                             </div>
                            
                             <script>
-                            function viewData(){
+                            function viewData(page){
                                 $.ajax({
                                     url: 'process.php?p=view',
-                                    method: 'GET'
+                                    method: 'GET',
+                                    data: {page: page}
                                 }).done(function(data){
-                                    $('tbody').html(data)
-                                    tableData()
+                                    $('.table-responsive').html(data)
+                                    tableData(page)
                                 })
                             }
-                            function tableData(){
+                            function tableData(page){
                                 $('#tabledit').Tabledit({
                                     url: 'process.php',
                                     eventType: 'dblclick',
@@ -99,7 +85,7 @@ session_start();
                                         editable: [[2, 'orderdate'],[3, 'paiddate'],[4, 'shipstat','{"1":"Đã thanh toán", "0":"Chưa thanh toán"}'],[5, 'shipstat','{"1":"Đã giao hàng", "0":"Chưa giao hàng"}']]
                                     },
                                     onSuccess: function(data, textStatus, jqXHR) {
-                                        viewData()
+                                        viewData(page)
                                     },
                                     onFail: function(jqXHR, textStatus, errorThrown) {
                                         console.log('onFail(jqXHR, textStatus, errorThrown)');

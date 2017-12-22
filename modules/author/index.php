@@ -40,43 +40,8 @@ checkUser();
                         <div class="white-box">
                             <h3 class="box-title">Danh sách tác giả</h3>
                             <div class="table-responsive">
-                                <table class="table table-hover" id="tabledit" >
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Tên tác giả</th>
-                                            <th>Ngày sinh</th>
-                                            <th>Địa chỉ</th>
-                                            <th>Tiểu sử</th>
-                                            <th>Ảnh</th>
-                                            <th><button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseInsert" aria-expanded="false" aria-controls="collapseInsert"><i class=" fa fa-plus-square"></i>  Thêm</button></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-
                             </div>
-                            <div>
-                                <nav aria-label="Page navigation">
-                                  <ul class="pagination">
-                                    <li>
-                                      <a href="#" class="disabled" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                      </a>
-                                    </li>
-                                    <li class="active"><a href="#">1<span class="sr-only">(current)</span></a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li><a href="#">5</a></li>
-                                    <li>
-                                      <a href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                      </a>
-                                    </li>
-                                  </ul>
-                                </nav>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -193,23 +158,20 @@ checkUser();
 </div>
 
 <script type="text/javascript">
+    viewData();
 
-    $(document).ready(function(){
-
-        fetch_data();
-
-        function fetch_data(){
-            $.ajax({
-                url:"process.php?p=view",
-                method:"POST",
-                success:function(data){
-                    $('tbody').html(data);
-                }
-            })
-        }
-
+    function viewData(page){
+        $.ajax({
+            url:"process.php?p=view",
+            method:'GET',
+            data: {page: page},
+            success:function(data){
+                $('.table-responsive').html(data);
+            }
+        })
+    }
         
-
+    $(document).ready(function(){
         $('form#insert_form').submit(function (e) {
             e.preventDefault();
             var formData = new FormData(this);

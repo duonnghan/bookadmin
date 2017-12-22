@@ -108,91 +108,6 @@ function createThumbnail($srcFile, $destFile, $width, $quality = 75)
 	return basename($thumbnail);
 }
 
-
-
-/*********************************************************
-	Tạo link phân trang
-*************************************************************/
-class PerPage {
-	public $perpage;
-	
-	function __construct() {
-		$this->perpage = 10;
-	}
-	
-	function getAllPageLinks($count) {
-		$output = '';
-		if(!isset($_GET["page"])) $_GET["page"] = 1;
-		if($this->perpage != 0)
-			$pages  = ceil($count/$this->perpage);
-		if($pages>1) {
-			if($_GET["page"] == 1) 
-				$output = $output . '<span class="link first disabled">&#8810;</span><span class="link disabled">&#60;</span>';
-			else	
-				$output = $output . '<a class="link first" onclick="fetch_data(\''  . (1) . '\')" >&#8810;</a><a class="link" onclick="fetch_data(\''  . ($_GET["page"]-1) . '\')" >&#60;</a>';
-			
-			
-			if(($_GET["page"]-3)>0) {
-				if($_GET["page"] == 1)
-					$output = $output . '<span id=1 class="link current">1</span>';
-				else				
-					$output = $output . '<a class="link" onclick="fetch_data(\''  . '1\')" >1</a>';
-			}
-			if(($_GET["page"]-3)>1) {
-					$output = $output . '<span class="dot">...</span>';
-			}
-			
-			for($i=($_GET["page"]-2); $i<=($_GET["page"]+2); $i++)	{
-				if($i<1) continue;
-				if($i>$pages) break;
-				if($_GET["page"] == $i)
-					$output = $output . '<span id='.$i.' class="link current">'.$i.'</span>';
-				else				
-					$output = $output . '<a class="link" onclick="fetch_data(\''  . $i . '\')" >'.$i.'</a>';
-			}
-			
-			if(($pages-($_GET["page"]+2))>1) {
-				$output = $output . '<span class="dot">...</span>';
-			}
-			if(($pages-($_GET["page"]+2))>0) {
-				if($_GET["page"] == $pages)
-					$output = $output . '<span id=' . ($pages) .' class="link current">' . ($pages) .'</span>';
-				else				
-					$output = $output . '<a class="link" onclick="fetch_data(\''  .  ($pages) .'\')" >' . ($pages) .'</a>';
-			}
-			
-			if($_GET["page"] < $pages)
-				$output = $output . '<a  class="link" onclick="fetch_data(\''  . ($_GET["page"]+1) . '\')" >></a><a  class="link" onclick="fetch_data(\''  . ($pages) . '\')" >&#8811;</a>';
-			else				
-				$output = $output . '<span class="link disabled">></span><span class="link disabled">&#8811;</span>';
-			
-			
-		}
-		return $output;
-	}
-	function getPrevNext($count) {
-		$output = '';
-		if(!isset($_GET["page"])) $_GET["page"] = 1;
-		if($this->perpage != 0)
-			$pages  = ceil($count/$this->perpage);
-		if($pages>1) {
-			if($_GET["page"] == 1) 
-				$output = $output . '<span class="link disabled first">Prev</span>';
-			else	
-				$output = $output . '<a class="link first" onclick="fetch_data(\''  . ($_GET["page"]-1) . '\')" >Prev</a>';			
-			
-			if($_GET["page"] < $pages)
-				$output = $output . '<a  class="link" onclick="fetch_data(\''  . ($_GET["page"]+1) . '\')" >Next</a>';
-			else				
-				$output = $output . '<span class="link disabled">Next</span>';
-			
-			
-		}
-		return $output;
-	}
-}
-
-
 //Ham lay thong tin sach
 function getBookInfo(){
     $sql = "SELECT b.id, b.`bookname`, b.`price`, b.`description`, b.`cover`, b.`updated`, b.`quantity`, c.categoryname, p.publishername, a.authorname
@@ -227,6 +142,10 @@ function getNumUsers(){
 //Ham lay so luong hoa don
 function getNumOrders(){
     return dbCount('orderbook');
+}
+
+function getNumBooks(){
+	return dbCount('book');
 }
 
 //Ham lay tong gia tri cac don hang

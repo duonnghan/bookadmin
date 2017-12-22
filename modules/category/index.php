@@ -2,9 +2,6 @@
 define("IN_SITE", true);
 include_once("../../libs/functions.php");
 session_start();
-
-$current_page = $_GET['page'] ?? 1;
-
 ?>
 
 <!DOCTYPE html>
@@ -42,32 +39,20 @@ $current_page = $_GET['page'] ?? 1;
                         <div class="white-box">
                             <h3 class="box-title">Danh sách các danh mục</h3>
                             <div class="table-responsive">
-                                <table class="table table-hover" id="tabledit" >
-                                    <thead>
-                                        <tr class="active">
-                                            <th>#</th>
-                                            <th>Tên danh mục</th>
-                                            <th>Hành động</th>
-                                            <th><button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd"><i class=" fa fa-plus-square"></i>  Thêm</button></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                            <!-- <script src="../../js/jquery.min.js"></script>
-                            <script src="../../js/bootstrap.min.js"></script>
-                            <script src="../../js/jquery.tabledit.js"></script> -->
+                            </div>   
+
                             <script>
-                            function viewData(){
+                            function viewData(page){
                                 $.ajax({
                                     url: 'process.php?p=view',
-                                    method: 'GET'
+                                    method: 'GET',
+                                    data: {page:page}
                                 }).done(function(data){
-                                    $('tbody').html(data)
-                                    tableData()
+                                    $('.table-responsive').html(data)
+                                    tableData(page)
                                 })
                             }
-                            function tableData(){
+                            function tableData(page){
                                 $('#tabledit').Tabledit({
                                     url: 'process.php',
                                     eventType: 'dblclick',
@@ -99,7 +84,7 @@ $current_page = $_GET['page'] ?? 1;
                                         editable: [[1, 'name']]
                                     },
                                     onSuccess: function(data, textStatus, jqXHR) {
-                                        viewData()
+                                        viewData(page)
                                     },
                                     onFail: function(jqXHR, textStatus, errorThrown) {
                                         console.log('onFail(jqXHR, textStatus, errorThrown)');
@@ -115,28 +100,6 @@ $current_page = $_GET['page'] ?? 1;
                                 });
                             }
                             </script>
-
-                            <div>
-                                <nav aria-label="Page navigation">
-                                  <ul class="pagination">
-                                    <li>
-                                      <a href="#" class="disabled" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                      </a>
-                                    </li>
-                                    <li class="active"><a href="#">1<span class="sr-only">(current)</span></a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li><a href="#">5</a></li>
-                                    <li>
-                                      <a href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                      </a>
-                                    </li>
-                                  </ul>
-                                </nav>
-                            </div>
                         </div>
                     </div>
                 </div>

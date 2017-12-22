@@ -1,5 +1,5 @@
 <?php
-    // include_once("../../libs/functions.php");
+    include_once('../../libs/pagination.php');
     $conn = new mysqli('localhost', 'root', '', 'qlsach');
     mysqli_set_charset($conn,"utf8");
 
@@ -29,27 +29,34 @@
     }
 
     if ($page == 'view') {
-        // $perPage = new PerPage();
+        $limit = 4;
+        $current_page = $_POST['page'] ?? 1;
+        $start_from = ($current_page - 1)*$limit;
+
         $sql = "SELECT b.id, b.bookname, b.price, b.description, b.cover, b.updated, b.quantity, a.authorname, p.publishername, c.categoryname
                                 FROM book AS b, author AS a, publisher as p, category AS c
-                                WHERE b.categoryid = c.id AND b.publisherid = p.id AND b.authorid = a.id";
-
-        // $paginationlink = "index.php?page=";
-        // $page = 1;
-        //     if(!empty($_GET["page"])) {
-        //         $page = $_GET["page"];
-        // }
-
-        // $start = ($page-1)*$perPage->perpage;
-        // if($start < 0) $start = 0;
-
-        // $sql =  $sql . " limit " . $start . "," . $perPage->perpage; 
+                                WHERE b.categoryid = c.id AND b.publisherid = p.id AND b.authorid = a.id 
+                                LIMIT $start_from,$limit"; 
 
         $result = $conn->query($sql);
         $output = '';
-        // if(empty($_GET["rowcount"])) {
-        //     $_GET["rowcount"] = $result->num_rows;
-        // }
+        $output .= '<table class="table table-hover" id="tabledit" >
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tựa sách</th>
+                            <th>Giá</th>
+                            <th>Tác giả</th>
+                            <th>Danh mục</th>
+                            <th>Nhà xuất bản</th>
+                            <th>Số lượng</th>
+                            <th>Mô tả</th>
+                            <th class="col-md-2">Ảnh bìa</th>
+                            <th>Lần cuối cập nhật</th>
+                            <th><button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseInsert" aria-expanded="false" aria-controls="collapseInsert"><i class=" fa fa-plus-square"></i>  Thêm</button></th>
+                        </tr>
+                    </thead>
+                    <tbody>';
 
         while($row = mysqli_fetch_array($result))
         {
@@ -74,6 +81,13 @@
             ';
         }
 
+        $output .= '</tbody></table></div>';
+        $result = $conn->query("SELECT id FROM book");
+        $total_record = $result->num_rows;
+        
+        $output .='<div><nav aria-label="Page navigation"><ul class="pagination">';          
+        $output .= getAllPageLinks($total_record, $current_page, $limit);
+        $output .= '</ul></nav>';
 
         echo $output;
     }

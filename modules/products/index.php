@@ -65,25 +65,6 @@ checkUser();
                         <div class="white-box">
                             <h3 class="box-title">Danh sách sản phẩm</h3>
                             <div class="table-responsive">
-                                <table class="table table-hover" id="tabledit" >
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Tựa sách</th>
-                                            <th>Giá</th>
-                                            <th>Tác giả</th>
-                                            <th>Danh mục</th>
-                                            <th>Nhà xuất bản</th>
-                                            <th>Số lượng</th>
-                                            <th>Mô tả</th>
-                                            <th>Ảnh bìa</th>
-                                            <th>Lần cuối cập nhật</th>
-                                            <th><button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseInsert" aria-expanded="false" aria-controls="collapseInsert"><i class=" fa fa-plus-square"></i>  Thêm</button></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-
                             </div>
                             <div id="pagination-result">
                                 <input type="hidden" name="rowcount" id="rowcount" />
@@ -309,24 +290,23 @@ checkUser();
 
 <script type="text/javascript">
 
+    viewData();
+
+    function viewData(page){
+        var currentPage = page;
+        $.ajax({
+            url:"process.php?p=view",
+            method:"POST",
+            data:{page:page},
+            beforeSend: function(){$("#overlay").show();},
+            success:function(data){
+                $('.table-responsive').html(data);
+                setInterval(function() {$("#overlay").hide(); },100);
+            }
+        })
+    }
+
     $(document).ready(function(){
-
-        fetch_data(1);
-
-        function fetch_data(page){
-            var currentPage = page;
-            $.ajax({
-                url:"process.php?p=view",
-                method:"POST",
-                beforeSend: function(){$("#overlay").show();},
-                success:function(data){
-                    $('tbody').html(data);
-                    setInterval(function() {$("#overlay").hide(); },500);
-                }
-            })
-        }
-
-        
 
         $('form#insert_form').submit(function (e) {
             e.preventDefault();

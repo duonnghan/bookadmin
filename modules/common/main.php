@@ -55,7 +55,7 @@ session_start();
                     <?php
                         $num_order = getNumOrders();
                         $num_user = getNumUsers();
-                        $total_prices = getTotalPrices();
+                        $num_book = getNumBooks();
                     ?>
                         <div class="row">
                             <div class="col-lg-4 col-sm-6 col-xs-12">
@@ -86,14 +86,14 @@ session_start();
                             </div>
                             <div class="col-lg-4 col-sm-6 col-xs-12">
                                 <div class="white-box analytics-info">
-                                    <h3 class="box-title">Tổng số tiền</h3>
+                                    <h3 class="box-title">Số lượng sách</h3>
                                     <ul class="list-inline two-part">
                                         <li>
                                             <div id="sparklinedash3">
                                                 <canvas width="67" height="30" style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
                                             </div>
                                         </li>
-                                        <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info"><?php echo $total_prices; ?></span></li>
+                                        <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info"><?php echo $num_book; ?></span></li>
                                     </ul>
                                 </div>
                             </div>

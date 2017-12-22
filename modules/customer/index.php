@@ -39,32 +39,19 @@ session_start();
                         <div class="white-box">
                             <h3 class="box-title">Danh sách các khách hàng</h3>
                             <div class="table-responsive">
-                                <table class="table table-hover" id="tabledit" >
-                                    <thead>
-                                        <tr class="active">
-                                            <th>#</th>
-                                            <th>Tên khách hàng</th>
-                                            <th>Email</th>
-                                            <th>Địa chỉ</th>
-                                            <th>Giới tính</th>
-                                            <th>Địa chỉ</th>
-                                            <th><button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd"><i class=" fa fa-plus-square"></i>  Thêm</button></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
                             </div>
                             <script>
-                            function viewData(){
+                            function viewData(page){
                                 $.ajax({
                                     url: 'process.php?p=view',
-                                    method: 'GET'
+                                    method: 'GET',
+                                    data: {page:page}
                                 }).done(function(data){
-                                    $('tbody').html(data)
-                                    tableData()
+                                    $('.table-responsive').html(data)
+                                    tableData(page)
                                 })
                             }
-                            function tableData(){
+                            function tableData(page){
                                 $('#tabledit').Tabledit({
                                     url: 'process.php',
                                     eventType: 'dblclick',
@@ -96,7 +83,7 @@ session_start();
                                         editable: [[1, 'name'],[2, 'email'],[3, 'address'],[4, 'gender','{"Nam":"Nam", "Nữ":"Nữ", "Khác":"Khác"}'],[5, 'phone']]
                                     },
                                     onSuccess: function(data, textStatus, jqXHR) {
-                                        viewData()
+                                        viewData(page)
                                     },
                                     onFail: function(jqXHR, textStatus, errorThrown) {
                                         console.log('onFail(jqXHR, textStatus, errorThrown)');
