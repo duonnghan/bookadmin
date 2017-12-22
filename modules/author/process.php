@@ -88,9 +88,10 @@
 
                 $output['id'] = $_POST['author_id'];
                 $output['name'] = $row['authorname'];
+                $output['dob'] = $row['dob'];
                 $output['address'] = $row['address'];
                 $output['bio'] = $row['bio'];
-                if ($row['cover'] != '') {
+                if ($row['avatar'] != '') {
                     $output['image'] = '<img src="data:image/jpeg;base64,'.base64_encode($row['avatar'] ).'" height="60" width="75" class="img-thumbnail" />';
                 }else{
                    $output['image'] = '<input type="hidden" name="hidden_author_image" value="" />';

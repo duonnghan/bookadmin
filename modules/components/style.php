@@ -12,4 +12,5 @@
     <!-- color CSS -->
     <link href="../../css/colors/default.css" id="theme" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap-datetimepicker.min.css">
     

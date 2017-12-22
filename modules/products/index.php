@@ -16,23 +16,6 @@ checkUser();
     <meta name="author" content="">
     <title>Người quản trị</title>
     <?php include_once('../components/style.php') ?>
-    <script>
-        function getresult(url) {
-            $.ajax({
-                url: url,
-                type: "GET",
-                data:  {rowcount:$("#rowcount").val()},
-                beforeSend: function(){$("#overlay").show();},
-                success: function(data){
-                    $("#pagination-result").html(data);
-                    setInterval(function() {$("#overlay").hide(); },500);
-                },
-                error: function() 
-                {}          
-           });
-        }
-        
-    </script>
 </head>
 
 <body class="fix-header" onload="viewData()">
@@ -238,7 +221,7 @@ checkUser();
                     </div>
                     <div class="form-group">
                         <label>Số lượng</label>
-                        <input type="text" class="form-control" id="modal_quantity" id="modal_quantity"><br>
+                        <input type="text" class="form-control" id="modal_quantity" name="modal_quantity"><br>
                     </div>
                     <div class="form-group">
                         <label>Danh mục</label>
@@ -268,7 +251,7 @@ checkUser();
                     </div>
                     <div class="form-group">
                         <label>Mô tả</label>
-                        <textarea class="form-control" id="modal_description" name="modal_description"></textarea><br>
+                        <textarea class="form-control" id="modal_description" rows="7" name="modal_description"></textarea><br>
                     </div>
                     <div class="form-group">
                         <label>Ảnh bìa</label>
@@ -331,9 +314,9 @@ checkUser();
                     method: "POST",
                     data: formData,
                     success: function (data) {
-                        fetch_data();
+                        viewData();
                         $('#insert_form')[0].reset();
-                        // $('#collapseInsert').toggle();
+                        $('#collapseInsert').toggle();
                     },
                     cache: false,
                     contentType: false,
@@ -366,7 +349,6 @@ checkUser();
                 success: function (data) {
                     $('#bookModal').modal('hide');
                     $('#bookModal')[0].reset();
-                    fetch_data();
                     location.reload();
                 },
                 cache: false,
@@ -385,6 +367,7 @@ checkUser();
                 data:{ book_id: book_id},
                 dataType: "json",
                 success: function(data){
+                    $('#modal_id').val(data.id);
                     $('#modal_name').val(data.name);
                     $('#modal_price').val(data.price);
                     $('#modal_authorid').val(data.authorid);
@@ -409,7 +392,7 @@ checkUser();
                         success:function(data){
                             alert(data);
                             location.reload();
-                            fetch_data();
+                            viewData();
                         }
                    })
                }

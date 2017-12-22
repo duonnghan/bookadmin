@@ -15,3 +15,4 @@
     <script src="../../js/custom.min.js"></script>
     <script src="../../js/dashboard1.js"></script>
    <script src="../../js/jquery.toast.js"></script>
+   <script src="../../js/formden.js"></script>

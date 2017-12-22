@@ -132,12 +132,15 @@ checkUser();
                         <input type="text" class="form-control" id="modal_name" name="modal_name"><br>
                     </div>
                     <div class="form-group">
+                        <label>Ngày sinh</label>
+                        <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
+                    <div class="form-group">
                         <label>Địa chỉ</label>
                         <input type="text" class="form-control" id="modal_address" name="modal_address"><br>
                     </div> 
                     <div class="form-group">
                         <label>Tiểu sử</label>
-                        <textarea class="form-control" id="modal_bio" name="modal_bio"></textarea><br>
+                        <textarea class="form-control" id="modal_bio" rows="7" name="modal_bio"></textarea><br>
                     </div>
                     <div class="form-group">
                         <label>Ảnh</label>
@@ -156,7 +159,8 @@ checkUser();
         </form>
     </div>
 </div>
-
+<script type="text/javascript" src="../../js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="../../css/bootstrap-datepicker3.css"/>
 <script type="text/javascript">
     viewData();
 
@@ -170,7 +174,18 @@ checkUser();
             }
         })
     }
-        
+    
+    function datepicker(){
+        var date_input=$('input[name="date"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'mm/dd/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+    }
+
     $(document).ready(function(){
         $('form#insert_form').submit(function (e) {
             e.preventDefault();
@@ -195,9 +210,9 @@ checkUser();
                     method: "POST",
                     data: formData,
                     success: function (data) {
-                        fetch_data();
+                        viewData();
                         $('#insert_form')[0].reset();
-                        // $('#collapseInsert').toggle();
+                        $('#collapseInsert').toggle();
                     },
                     cache: false,
                     contentType: false,
@@ -230,7 +245,7 @@ checkUser();
                 success: function (data) {
                     $('#authorModal').modal('hide');
                     $('#authorModal')[0].reset();
-                    fetch_data();
+                    viewData();
                     location.reload();
                 },
                 cache: false,
@@ -238,7 +253,6 @@ checkUser();
                 processData: false
             });
         });
-
 
         $(document).on('click', '.update', function(){
             var author_id = $(this).attr("id");
@@ -249,11 +263,13 @@ checkUser();
                 data:{ author_id: author_id},
                 dataType: "json",
                 success: function(data){
+                    $('#modal_id').val(data.id);
                     $('#modal_name').val(data.name);
                     $('#modal_address').val(data.address);
                     $('#modal_bio').val(data.bio);
                     $('#author_uploaded_image').html(data.image);
                     $('#authorModal').modal('show');
+                    datepicker();
                 }
             })
         });
@@ -269,7 +285,7 @@ checkUser();
                         success:function(data){
                             alert(data);
                             location.reload();
-                            fetch_data();
+                            viewData();
                         }
                    })
                }
