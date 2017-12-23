@@ -16,10 +16,11 @@
 
         $name = $_POST['name'];
         $address = $_POST['address'];
+        $dob = $_POST['dob'];
         $bio = addslashes($_POST['bio']);
         $image = addslashes(file_get_contents($_FILES["image"]["tmp_name"]));
 
-        $result = $conn->query("INSERT INTO author(authorname, address, bio, avatar) VALUES ('$name', '$address', '$bio','$image')");
+        $result = $conn->query("INSERT INTO author(authorname, dob, address, bio, avatar) VALUES ('$name', '$dob', '$address', '$bio','$image')");
         if ($result) {
             echo "Thêm tác giả thành công";
         }else

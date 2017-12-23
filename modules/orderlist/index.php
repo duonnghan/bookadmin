@@ -38,11 +38,12 @@ session_start();
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 ">
                         <div class="white-box">
-                            <h3 class="box-title">Danh sách các khách hàng</h3>
+                            <h3 class="box-title">Danh sách các đơn hàng</h3>
                             <div class="table-responsive">
                             </div>
                            
                             <script>
+
                             function viewData(page){
                                 $.ajax({
                                     url: 'process.php?p=view',
@@ -53,6 +54,8 @@ session_start();
                                     tableData(page)
                                 })
                             }
+
+
                             function tableData(page){
                                 $('#tabledit').Tabledit({
                                     url: 'process.php',
@@ -100,6 +103,7 @@ session_start();
                                     }
                                 });
                             }
+
                             </script>
                         </div>
                     </div>
@@ -122,3 +126,97 @@ session_start();
 </body>
 
 </html>
+
+<div id="orderModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <form id="modal_view_form" method="post">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Chi tiết đơn hàng</h4>
+            </div>
+
+                <div class="modal-body">
+                    
+                    <input type="hidden" name="modal_id" id="modal_id" />
+                    <div class="col-md-6">
+                        <strong>Họ tên: </strong>
+                        <span id="modal_name"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Giới tính: </strong>
+                        <span id="modal_gender"></span>
+                    </div>
+                    <br><br>
+                    <div class="col-md-12">
+                        <strong>Địa chỉ: </strong>
+                        <span id="modal_address"></span>
+                    </div>
+                    <br><br>
+                    <div class="col-md-12">
+                        <strong>Email: </strong>
+                        <span id="modal_email"></span>
+                    </div>
+                    <br><br>
+                    <div class="col-md-12">
+                        <strong>Số điện thoại: </strong>
+                        <span id="modal_phone"></span>
+                    </div>
+
+                    <div class="col-md-12">
+                        <h3 class="text-center"><strong>Thông tin các sản phẩm</strong></h3>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Tên sách</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn giá</th>
+                                    <th>Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal_order_detail">
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <br><br>
+                    <div class="text-right col-md-12"><strong>Tổng: </strong>$ <span id="modal_amount"></span></div>
+                    <br><br>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+
+        </div>
+        </form>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $(document).on('click', '.view', function(){
+            var order_id = $(this).attr("id");
+            $.ajax({
+                url: "process.php?p=fetch_order",
+                method: "POST",
+                data:{order_id:order_id},
+                dataType: "json",
+                success: function(data){
+                    $('#modal_id').val(data.id);
+                    $('#modal_name').val(data.c_name);
+                    $('#modal_email').val(data.c_email);
+                    $('#modal_address').val(data.c_address);
+                    $('#modal_phone').val(data.c_phone);
+                    $('#modal_gender').val(data.c_gender);
+                    $('#modal_order_detail').html(data.order_detail);
+                    $('#orderModal').modal('show');
+                }
+            })
+        });
+
+    });
+
+    
+</script>

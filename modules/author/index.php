@@ -14,7 +14,7 @@ checkUser();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Người quản trị</title>
+    <title>Tác giả</title>
     <?php include_once('../components/style.php') ?>
 </head>
 
@@ -63,6 +63,14 @@ checkUser();
                                         <div class="col-md-12">
                                             <input type="text" id="name" name="name" placeholder="Nhập tên tác giả" class="form-control form-control-line">
                                         </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-12">Ngày sinh</label>
+                                        <div class="col-md-12">
+                                            <input class="form-control" id="dob" name="dob" placeholder="YYYY-MM-DD" type="text"/>
+                                            <span class="error"> Invalid Date.(yyyy-mm-dd)</span>
+                                        </div>
+
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-12">Địa chỉ</label>
@@ -133,7 +141,8 @@ checkUser();
                     </div>
                     <div class="form-group">
                         <label>Ngày sinh</label>
-                        <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
+                        <input class="form-control" id="modal_dob" name="modal_dob" placeholder="YYYY-MM-DD" type="text"/>
+                    </div>    
                     <div class="form-group">
                         <label>Địa chỉ</label>
                         <input type="text" class="form-control" id="modal_address" name="modal_address"><br>
@@ -159,8 +168,11 @@ checkUser();
         </form>
     </div>
 </div>
+
+<!-- add date picker -->
 <script type="text/javascript" src="../../js/bootstrap-datepicker.min.js"></script>
 <link rel="stylesheet" href="../../css/bootstrap-datepicker3.css"/>
+
 <script type="text/javascript">
     viewData();
 
@@ -176,10 +188,10 @@ checkUser();
     }
     
     function datepicker(){
-        var date_input=$('input[name="date"]'); //our date input has the name "date"
+        var date_input=$('input[name="modal_dob"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         date_input.datepicker({
-            format: 'mm/dd/yyyy',
+            format: 'yyyy-mm-dd',
             container: container,
             todayHighlight: true,
             autoclose: true,
@@ -187,10 +199,21 @@ checkUser();
     }
 
     $(document).ready(function(){
+        $('.error').hide();
+
         $('form#insert_form').submit(function (e) {
             e.preventDefault();
             var formData = new FormData(this);
             var image = $('#image').val();
+            var dob = $('#dob').val();
+
+            if(ValidateDate(dtVal)){
+                $('.error').hide();
+            }
+                else{
+                $('.error').show();
+                event.preventDefault();
+            }
 
             if (image == '') {
                 alert("Vui lòng chọn tập tin");
@@ -265,6 +288,7 @@ checkUser();
                 success: function(data){
                     $('#modal_id').val(data.id);
                     $('#modal_name').val(data.name);
+                    $('#modal_dob').val(data.dob);
                     $('#modal_address').val(data.address);
                     $('#modal_bio').val(data.bio);
                     $('#author_uploaded_image').html(data.image);
@@ -294,6 +318,11 @@ checkUser();
                  return false;
                }
             });
+
+        function ValidateDate(dtValue){
+            var dtRegex = new RegExp(/\b\d{4}[-]\d{1,2}[-]\d{1,2}\b/);
+            return dtRegex.test(dtValue);
+        }
 
     });
 

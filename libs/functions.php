@@ -134,6 +134,14 @@ function getCategoryInfo(){
 	return $result;
 }
 
+function getCustomerOrderInfo($orderid){
+	$sql = "SELECT c.name, c.email, c.address, c.gender, c.phone
+			FROM `orderbook` AS ob, `customer` AS c
+			WHERE c.id = ob.userid, ob.id='$orderid' ";
+	$result = dbQuery($sql);
+	return $result;
+}
+
 //Ham lay so luong nguoi dung
 function getNumUsers(){
    return dbCount('customer');
