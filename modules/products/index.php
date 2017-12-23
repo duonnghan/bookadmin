@@ -276,7 +276,7 @@ checkUser();
     viewData();
 
     function viewData(page){
-        var currentPage = page;
+        // var currentPage = page;
         $.ajax({
             url:"process.php?p=view",
             method:"POST",
@@ -329,7 +329,7 @@ checkUser();
         $('form#modal_update_form').submit(function(e){
             e.preventDefault();
             var formData = new FormData(this);
-
+            var currentPage = $('.current_page').text();
             var cover = $('#modal_cover').val();
             if (cover != ''){
                 //Dinh dang cua anh
@@ -348,8 +348,9 @@ checkUser();
                 data: formData,
                 success: function (data) {
                     $('#bookModal').modal('hide');
-                    $('#bookModal')[0].reset();
-                    location.reload();
+                    // $('#bookModal')[0].reset();
+                    viewData(currentPage);
+                    // location.reload();
                 },
                 cache: false,
                 contentType: false,
@@ -360,7 +361,6 @@ checkUser();
 
         $(document).on('click', '.update', function(){
             var book_id = $(this).attr("id");
-
             $.ajax({
                 url: "process.php?p=fetch_book",
                 method: "POST",
@@ -370,10 +370,10 @@ checkUser();
                     $('#modal_id').val(data.id);
                     $('#modal_name').val(data.name);
                     $('#modal_price').val(data.price);
-                    $('#modal_authorid').val(data.authorid);
+                    $('#modal_author').val(data.authorid);
                     $('#modal_quantity').val(data.quantity);
-                    $('#modal_publisherid').val(data.publisherid);
-                    $('#modal_categoryid').val(data.categoryid);
+                    $('#modal_publisher').val(data.publisherid);
+                    $('#modal_category').val(data.categoryid);
                     $('#modal_description').val(data.description);
                     $('#book_uploaded_image').html(data.cover);
                     $('#bookModal').modal('show');

@@ -11,7 +11,7 @@
 
 		if ($total_pages <= 1) {
 			$html .= '<li><span>&laquo;</span></li>';
-	    	$html .= '<li class="active"><a onclick="viewData(1)">1</a></li>';
+	    	$html .= '<li class="active"><a onclick="viewData(1)" class="current_page">1</a></li>';
 	    	$html .= '<li><span>&raquo;</span></li>';
 	    	return $html;
 		}
@@ -33,7 +33,7 @@
 	        $html .= '<li><a onclick="viewData(1)">1</a></li>';
 	    }else{
 	    	$html .= '<li><span>&laquo;</span></li>';
-	    	$html .= '<li class="active"><a onclick="viewData(1)">1</a></li>';
+	    	$html .= '<li class="active"><a onclick="viewData(1)" class="current_page">1</a></li>';
 	    }
 
 	    if ($current_page-2>1) {
@@ -49,7 +49,7 @@
 	    		break;
 	    	}
 	    	if ($i == $current_page) {
-	    		$html .= '<li class="active"><a onclick="viewData('.($i).')">'.$i.'</a></li>';
+	    		$html .= '<li class="active"><a onclick="viewData('.($i).')" class="current_page">'.$i.'</a></li>';
 	    	}else{
 	    		$html .= '<li><a onclick="viewData('.($i).')">'.$i.'</a></li>';
 	    	}
@@ -64,7 +64,7 @@
 	    	$html .= '<li><a onclick="viewData('.($total_pages).')">'.$total_pages.'</a></li>';
 	        $html .= '<li><a onclick="viewData('.($current_page+1).')">&raquo;</a></li>';
 	    }else{
-	    	$html .= '<li class="active"><a onclick="viewData('.($total_pages).')">'.$total_pages.'</a></li>';
+	    	$html .= '<li class="active"><a onclick="viewData('.($total_pages).')" class="current_page">'.$total_pages.'</a></li>';
 	    	$html .= '<li><span>&raquo;</span></li>';
 	    }
 

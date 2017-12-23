@@ -248,7 +248,7 @@ checkUser();
         $('form#modal_update_form').submit(function(e){
             e.preventDefault();
             var formData = new FormData(this);
-
+            var currentPage = $('.current_page').text();
             var image = $('#modal_image').val();
             if (image != ''){
                 //Dinh dang cua anh
@@ -267,9 +267,9 @@ checkUser();
                 data: formData,
                 success: function (data) {
                     $('#authorModal').modal('hide');
-                    $('#authorModal')[0].reset();
-                    viewData();
-                    location.reload();
+                    // $('#authorModal')[0].reset();
+                    viewData(currentPage);
+                    // location.reload();
                 },
                 cache: false,
                 contentType: false,
