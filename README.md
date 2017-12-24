@@ -7,5 +7,4 @@
 
 
 ==Author==: ![HD](https://www.facebook.com/duonngbk)  
-![](https://raw.githubusercontent.com/duonnghan/bookadmin/blob/master/plugins/images/avatar/tux.jpg) (&lt;img /&gt;)
 ---
