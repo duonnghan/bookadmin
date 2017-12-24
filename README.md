@@ -6,6 +6,6 @@
 - *Book* : Display book's information such as: name, price, quantity, author, category, description, cover.  
 - 
 
-
-Author : https://www.facebook.com/duonngbk  
+***
+Author : [HD](https://www.facebook.com/duonngbk)  
 ---
