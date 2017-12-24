@@ -1,4 +1,5 @@
 # ibookonline admin cpanel create by PHP MSQL AJAX JQuery
+***
 ## This webpage includes these following feature:
 - *View dashboad* : Overview about website status: amount of customer, order and product.  
 - *Admin* : manger admin account include username and password(crypted).  
@@ -6,5 +7,5 @@
 - 
 
 
-Author : [HD](https://www.facebook.com/duonngbk)  
+Author : https://www.facebook.com/duonngbk  
 ---
