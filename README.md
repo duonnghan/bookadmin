@@ -6,5 +6,5 @@
 - 
 
 
-==Author== : ![HD]("https://www.facebook.com/duonngbk")  
+Author : [HD](https://www.facebook.com/duonngbk)  
 ---
