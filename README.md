@@ -9,3 +9,4 @@
 ***
 Author : [HD](https://www.facebook.com/duonngbk)  
 ---
+![Cover](/plugins/images/avatar/tux.jpg)
