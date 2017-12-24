@@ -157,6 +157,15 @@
             if ($input['action'] === 'edit') {
                 $conn->query("UPDATE orderbook SET orderdate='" . $input['orderdate']."',shipdate='" . $input['shipdate']."', amount='" . $input['amount']."',paidstat='" . $input['paidstat']."',shipstat='" . $input['shipstat']. "' WHERE id='" . $input['id'] . "'");
             } else if ($input['action'] === 'delete') {
+                //Xoa chi tiet hoa don
+                $conn->query("DELETE FROM orderdetail WHERE orderid='" . $input['id'] . "'");
+                //Xoa khach hang neu chi con 1 don hang nay
+                $result = $conn->query("SELECT userid FROM orderbook WHERE id ='".$input['id']."'");
+                if ($result->num_rows <= 1) {
+                    $row = $result->fetch_assoc();
+                    $conn->query("DELETE FROM customer WHERE id='" . $row['userid'] . "'");
+                }
+                //Xoa hoa don
                 $conn->query("DELETE FROM orderbook WHERE id='" . $input['id'] . "'");
                 
             }
