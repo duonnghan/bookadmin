@@ -117,15 +117,16 @@
 
         $id             = $_POST['modal_id'];
         $name           = $_POST['modal_name'];
-        $addres         = $_POST['modal_addres'];
-        $bio            = $_POST['modal_bio'];
+        $address         = $_POST['modal_address'];
+        $dob            = $_POST['modal_dob'];
+        $bio            = addslashes($_POST['modal_bio']);
     
         if ($_POST['modal_image'] != '') {
             $image = addslashes(file_get_contents($_FILES["modal_image"]["tmp_name"]));
             $result = $conn->query("UPDATE author SET avatar='$image' WHERE id='$id' ");
         }
 
-        $sql = "UPDATE author SET authorname = '$name', address ='$address',bio='$bio WHERE id = '$id'";
+        $sql = "UPDATE author SET authorname = '$name', address ='$address', dob ='$dob',bio='$bio' WHERE id = '$id'";
         
         $result = $conn->query($sql);
         if ($result) {   

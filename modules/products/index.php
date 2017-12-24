@@ -337,7 +337,7 @@ checkUser();
                 //Neu anh upload khong thuoc cac dinh dang thong tuong
                 if(jQuery.inArray(extension, ['gif','png','jpg','jpeg']) == -1){
                     alert("Định dạng file ảnh không hợp lệ");
-                    $('#cover').val('');
+                    $('#modal_cover').val('');
                     return false;
                 }
             }

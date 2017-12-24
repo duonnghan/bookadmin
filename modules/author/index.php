@@ -206,7 +206,6 @@ checkUser();
             var formData = new FormData(this);
             var image = $('#image').val();
             var dob = $('#dob').val();
-
             if(ValidateDate(dtVal)){
                 $('.error').hide();
             }
@@ -249,6 +248,7 @@ checkUser();
             e.preventDefault();
             var formData = new FormData(this);
             var currentPage = $('.current_page').text();
+
             var image = $('#modal_image').val();
             if (image != ''){
                 //Dinh dang cua anh
@@ -300,6 +300,7 @@ checkUser();
 
         $(document).on('click', '.delete', function(){
                 var author_id = $(this).attr("id");
+                var currentPage = $('.current_page').text();
                 if(confirm("Bạn có muốn chắc chắn muốn xóa bản ghi không?"))
                 {
                     $.ajax({
@@ -308,8 +309,8 @@ checkUser();
                         data:{author_id: author_id},
                         success:function(data){
                             alert(data);
-                            location.reload();
-                            viewData();
+                            // location.reload();
+                            viewData(currentPage);
                         }
                    })
                }
