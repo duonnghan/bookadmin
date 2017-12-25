@@ -3,11 +3,13 @@
 include_once("database.php");
 include_once("config.php");
 include_once("session.php");
-/*
+include_once("crypto.php");
+
+/*************************************************
 	Kiểm tra nếu phiên user id có hay không. Nếu không chuyển
 	tới trang login. Nếu có và tìm thấy
 	$_GET['logout'] trong truy vấn thì đăng xuất thành viên
-*/
+*************************************************/
 function checkUser()
 {
 	// Nếu phiên id không thiết lập, chuyển tới trang login
@@ -38,7 +40,7 @@ function doLogin()
 	// nếu tìm thấy lỗi, lưu lỗi vào biến sau
 	$errorMessage = '';
 	$userName = $_POST['txtUserName'];
-	$password = md5($_POST['txtPassword']);
+	$password = $_POST['txtPassword'];
 
 	// trước tiên, chắc chắn là username & password có giá trị
 	if ($userName == '') {
@@ -47,24 +49,27 @@ function doLogin()
 		$errorMessage = 'Vui lòng nhập mật khẩu';
 	} else {
 		// kiểm tra database và thấy nếu username và password đều có
-		$sql="select username from admin where username='" . $userName . "' And password='".$password. "'";
+		$sql="select * from admin where username='" . $userName. "' LIMIT 1";
 		$result = dbQuery($sql);
 
 		if (dbNumRows($result) == 1) {
 			$row = dbFetchAssoc($result);
-			$_SESSION['admin_id'] = $row['username'];
-            echo "Dang nhap thanh cong";
+			if (hash_equals($row['password'], crypt($password, $row['password']))) {
+				$_SESSION['admin_id'] = $row['username'];
+	            echo "Dang nhap thanh cong";
 
-			// ghi lại thời gian mà thành viên đó đăng nhập lần cuối
-			$sql = "UPDATE admin
-			        SET lastlogin = NOW()
-					WHERE username = '{$row['username']}'";
-			dbQuery($sql);
-                  
-            redirect("main.php");
+				// ghi lại thời gian mà thành viên đó đăng nhập lần cuối
+				$sql = "UPDATE admin
+				        SET lastlogin = NOW()
+						WHERE username = '{$row['username']}'";
+				dbQuery($sql);
+	                  
+	            redirect("main.php");
+			}
+			
 		} else {
-			$errorMessage = 'Sai tên đăng nhập hoặc mật khẩu';
-			echo "<script>alert('Sai tên đăng nhập hoặc mật khẩu, vui lòng nhập lại.')</script>";
+			$errorMessage = 'Sai tên đăng nhập hoặc mật khẩu, vui lòng nhập lại.';
+			echo "<script>alert('.$errorMessage.')</script>";
 		}
 
 	}
@@ -72,9 +77,9 @@ function doLogin()
 	return $errorMessage;
 }
 
-/*
+/*************************
 	Thành viên đăng xuất
-*/
+*************************/
 function doLogout()
 {
 	if (isset($_SESSION['admin_id'])) {
@@ -86,29 +91,9 @@ function doLogout()
 	exit();
 }
 
-
-/*************************************************
-	Tạo thumbnail của $srcFile và lưu vào $destFile.
-	Thumbnail có kích thước $width pixel.
-**************************************************/
-function createThumbnail($srcFile, $destFile, $width, $quality = 75)
-{
-	$thumbnail = '';
-
-	if (file_exists($srcFile)  && isset($destFile))
-	{
-		$size        = getimagesize($srcFile);
-		$w           = number_format($width, 0, ',', '');
-		$h           = number_format(($size[1] / $size[0]) * $width, 0, ',', '');
-
-		$thumbnail =  copyImage($srcFile, $destFile, $w, $h, $quality);
-	}
-
-	// trả về tên file thumbnail khi thành công hoặc để trắng nếu không được
-	return basename($thumbnail);
-}
-
-//Ham lay thong tin sach
+/*************************
+	Ham lay thong tin sach
+*************************/
 function getBookInfo(){
     $sql = "SELECT b.id, b.`bookname`, b.`price`, b.`description`, b.`cover`, b.`updated`, b.`quantity`, c.categoryname, p.publishername, a.authorname
     FROM `book` AS b, author AS a, publisher AS p, category AS c
