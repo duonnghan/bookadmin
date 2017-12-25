@@ -1,5 +1,6 @@
 <?php
     include_once('../../libs/pagination.php');
+
     $conn = new mysqli('localhost', 'root', '', 'qlsach');
     mysqli_set_charset($conn,"utf8");
 
@@ -8,16 +9,20 @@
       exit;
     }
 
+    //SHA-256
+    $salt = '$5$rounds=5000$LTWEB20171-ibookonline-A$';
+
     $page = isset($_GET['p'])? $_GET['p'] : '';
 
     if ($page == 'add') {
         $username = $_POST['user'];
         $password = $_POST['pass'];
-        $password = md5($password);
 
+        // $password = md5($password);
+        $password = crypt($password, $salt);
         $result = $conn->query("INSERT INTO admin(username, password) VALUES ('$username', '$password')");
         if ($result) {
-            echo "Thêm tài khoản thành công";
+            echo "Thêm tài khoản thành công: $password";
         }else
             echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -46,11 +51,12 @@
                     <td>'. $row['id'].'</td>
                     <td>'. $row['username'].'</td>
                     <td>'. $row['password'].'</td>
-                    <td>'. $row['lastlogin'].'</td>                
+                    <td>'. $row['lastlogin'].'</td>              
                 </tr>';
         }
 
         $output .= '</tbody></table></div>';
+
         $result = $conn->query("SELECT id FROM admin");
         $total_record = $result->num_rows;
         
@@ -58,7 +64,7 @@
         $output .= getAllPageLinks($total_record, $current_page, $limit);
         $output .= '</ul></nav>';  
         echo $output;
-    }else{
+    }else{ //Update and delete admin
 
         header('Content-Type: application/json');
         $input = filter_input_array(INPUT_POST);

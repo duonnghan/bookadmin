@@ -1,8 +1,8 @@
 <?php
-define("IN_SITE", true);
-include_once("../../libs/functions.php");
-session_start();
-
+    define("IN_SITE", true);
+    include_once("../../libs/functions.php");
+    session_start();
+    checkUser();
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +41,8 @@ session_start();
                             <h3 class="box-title">Danh sách admin</h3>
                             <div class="table-responsive">
                             </div>
-
+                            
+                            <!-- View data and CRUD by AJAX and Tabledit plugin -->
                             <script>
                             function viewData(page){
                                 $.ajax({

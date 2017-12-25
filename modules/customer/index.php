@@ -1,8 +1,8 @@
 <?php
-define("IN_SITE", true);
-include_once("../../libs/functions.php");
-session_start();
-
+    define("IN_SITE", true);
+    include_once("../../libs/functions.php");
+    session_start();
+    checkUser();
 ?>
 
 <!DOCTYPE html>

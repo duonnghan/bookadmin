@@ -11,6 +11,7 @@ include_once("../../libs/functions.php");
 <head>
     <meta charset="UTF-8">
     <title>Đăng nhập</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../../plugins/images/favicon.png">
     <link rel="stylesheet" href="../../css/stylelogin.css">
 
 </head>

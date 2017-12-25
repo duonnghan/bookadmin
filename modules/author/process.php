@@ -9,7 +9,7 @@
       exit;
     }
 
-    //Lay du lieu
+    //get the page
     $page = $_GET['p'] ?? '';
 
     if ($page == 'add') {

@@ -1,8 +1,8 @@
 <?php
-define("IN_SITE", true);
-include_once("../../libs/functions.php");
-session_start();
-checkUser();
+    define("IN_SITE", true);
+    include_once("../../libs/functions.php");
+    session_start();
+    checkUser();
 ?>
 
 <!DOCTYPE html>
@@ -47,9 +47,9 @@ checkUser();
                 </div>
     
                 <!-- ============================================================== -->
-                <!-- Them author -->
+                <!-- Add author -->
                 <!-- ============================================================== -->
-                <!-- Hien thi ket qua sau khi them -->
+                <!-- Then display result after add -->
                 <div id="result"></div>
 
                 <div class="container">
@@ -123,6 +123,7 @@ checkUser();
 
 </html>
 
+<!-- Update author's infomation through modal dialog -->
 <div id="authorModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <form id="modal_update_form" method="post" enctype="multipart/form-data">
@@ -169,7 +170,7 @@ checkUser();
     </div>
 </div>
 
-<!-- add date picker -->
+<!-- Add date picker -->
 <script type="text/javascript" src="../../js/bootstrap-datepicker.min.js"></script>
 <link rel="stylesheet" href="../../css/bootstrap-datepicker3.css"/>
 
