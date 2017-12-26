@@ -38,7 +38,6 @@
                             <tr>
                                 <th>#</th>
                                 <th>Tài khoản</th>
-                                <th>Mật khẩu</th>
                                 <th>Lân cuối đăng nhập</th>
                                 <th>Hành động</th>
                                 <th><button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseInsert" aria-expanded="false" aria-controls="collapseInsert"><i class=" fa fa-plus-square"></i>  Thêm</button></th>
@@ -50,7 +49,6 @@
             $output .= '<tr>
                     <td>'. $row['id'].'</td>
                     <td>'. $row['username'].'</td>
-                    <td>'. $row['password'].'</td>
                     <td>'. $row['lastlogin'].'</td>              
                 </tr>';
         }
