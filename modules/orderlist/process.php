@@ -58,7 +58,7 @@
                 
                 $output .= '<div class="col-md-12">
                             <h3 class="text-center"><strong>Thông tin các sản phẩm</strong></h3>
-                            <table class="table table-striped table-hover">
+                            <table class="table  table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>Tên sách</th>

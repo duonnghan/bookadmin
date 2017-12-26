@@ -137,8 +137,8 @@
                 <h4 class="modal-title">Chi tiết đơn hàng</h4>
             </div>
 
-                <div class="modal-body">
-                </div>
+            <div class="modal-body">
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
             </div>
